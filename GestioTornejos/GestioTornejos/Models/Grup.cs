@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GestioTornejos.Models
 {
-    public class Grup
+    public class Grup : INotifyPropertyChanged
     {
         private int id;
 
@@ -14,14 +16,6 @@ namespace GestioTornejos.Models
         {
             get { return id; }
             set { id = value; }
-        }
-
-        private Torneig torneig;
-
-        public Torneig Torneig
-        {
-            get { return torneig; }
-            set { torneig = value; }
         }
 
         private String descripcio;
@@ -46,6 +40,25 @@ namespace GestioTornejos.Models
         {
             get { return limitEntrades; }
             set { limitEntrades = value; }
+        }
+
+        private ObservableCollection<Inscripcio> inscripcions;
+
+        public ObservableCollection<Inscripcio> Inscripcions
+        {
+            get { return inscripcions; }
+            set { inscripcions = value; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public Grup(int id, string descripcio, int carambolesVictoria, int limitEntrades)
+        {
+            Id = id;
+            Descripcio = descripcio;
+            CarambolesVictoria = carambolesVictoria;
+            LimitEntrades = limitEntrades;
+            inscripcions = new ObservableCollection<Inscripcio>();
         }
     }
 }

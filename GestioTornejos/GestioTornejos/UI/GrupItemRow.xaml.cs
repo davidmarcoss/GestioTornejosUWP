@@ -18,25 +18,25 @@ using Windows.UI.Xaml.Navigation;
 
 namespace GestioTornejos.UI
 {
-    public sealed partial class TorneigItemRow : UserControl
+    public sealed partial class GrupItemRow : UserControl
     {
-        public TorneigItemRow()
+        public GrupItemRow()
         {
             this.InitializeComponent();
         }
 
-        public Torneig Torneig
+        public Grup Grup
         {
-            get { return (Torneig)GetValue(TorneigProperty); }
+            get { return (Grup)GetValue(GrupProperty); }
             set
             {
-                SetValue(TorneigProperty, value);
+                SetValue(GrupProperty, value);
 
                 this.DataContext = value;
             }
         }
 
-        public static readonly DependencyProperty TorneigProperty =
-            DependencyProperty.Register("Torneig", typeof(Torneig), typeof(TorneigItemRow), new PropertyMetadata(0));
+        public static readonly DependencyProperty GrupProperty =
+            DependencyProperty.Register("Grup", typeof(Grup), typeof(GrupItemRow), new PropertyMetadata(0));
     }
 }

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GestioTornejos.Models
 {
-    public class Torneig
+    public class Torneig : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private int id;
 
         public int Id
@@ -40,6 +44,14 @@ namespace GestioTornejos.Models
             set { dataInici = value; }
         }
 
+        private DateTime dataFi;
+
+        public DateTime DataFi
+        {
+            get { return dataFi; }
+            set { dataFi = value; }
+        }
+
         private bool preinscripcioOberta;
 
         public bool PreinscripcioOberta
@@ -48,12 +60,20 @@ namespace GestioTornejos.Models
             set { preinscripcioOberta = value; }
         }
 
-        private List<Grup> grups;
+        private ObservableCollection<Grup> grups;
 
-        public List<Grup> Grups
+        public ObservableCollection<Grup> Grups
         {
             get { return grups; }
             set { grups = value; }
+        }
+
+        private ObservableCollection<Inscripcio> inscripcions;
+
+        public ObservableCollection<Inscripcio> Inscripcions
+        {
+            get { return inscripcions; }
+            set { inscripcions = value; }
         }
 
         public Torneig(int id, Modalitat modalitat, string nom, DateTime dataInici, bool preinscripcioOberta)

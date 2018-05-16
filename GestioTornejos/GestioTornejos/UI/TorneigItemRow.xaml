@@ -3,13 +3,27 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GestioTornejos.UI"
+    xmlns:conv="using:GestioTornejos.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="100"
+    d:DesignHeight="200"
     d:DesignWidth="400">
 
-    <Grid>
+    <UserControl.Resources>
+        <conv:DateFormatConverter x:Name="DateToStringFormatConverter"/>
+    </UserControl.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" x:Name="tbNom" 
+                   Text="{Binding Nom, Mode=TwoWay}"></TextBlock>
+        <TextBlock Grid.Row="1" x:Name="tbDataInici" 
+                   Text="{Binding DataInici, Mode=TwoWay, Converter={StaticResource DateToStringFormatConverter}}"></TextBlock>
     </Grid>
 </UserControl>
