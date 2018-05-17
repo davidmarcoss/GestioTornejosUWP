@@ -21,7 +21,8 @@ namespace GestioTornejos.DB
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
                     consulta.CommandText = @"select * from grups
-                                            where torneig_id = @p_torneigId";
+                                            where torneig_id = @p_torneigId
+                                            and actiu = 1";
 
                     AddParameter(consulta, "p_torneigId", torneigId, MySqlDbType.Int32);
 
@@ -52,7 +53,8 @@ namespace GestioTornejos.DB
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
                     consulta.CommandText = @"select * from grups
-                                            where id = @p_id";
+                                            where id = @p_id
+                                            and actiu = 1";
 
                     AddParameter(consulta, "p_id", id, MySqlDbType.Int32);
 
@@ -183,6 +185,46 @@ namespace GestioTornejos.DB
                     catch (Exception e)
                     {
                         trans.Rollback();
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        public static bool Delete(Grup grup)
+        {
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+                MySqlTransaction trans = connexio.BeginTransaction();
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.Transaction = trans;
+
+                    consulta.CommandText = @"update grups set actiu=0 where id = @p_id";
+
+                    AddParameter(consulta, "p_id", grup.Id, MySqlDbType.Int32);
+
+                    try
+                    {
+                        if (consulta.ExecuteNonQuery() != 1)
+                        {
+                            trans.Rollback();
+                        }
+                        else
+                        {
+                            consulta.CommandText = @"update inscripcions set grup_id=NULL where grup_id = @p_id";
+                            consulta.ExecuteNonQuery();
+
+                            trans.Commit();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        trans.Rollback();
+
                         return false;
                     }
 

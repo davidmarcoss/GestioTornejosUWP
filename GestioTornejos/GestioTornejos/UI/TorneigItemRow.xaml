@@ -14,7 +14,7 @@
         <conv:DateFormatConverter x:Name="DateToStringFormatConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Padding="5">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -22,8 +22,21 @@
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0" x:Name="tbNom" 
-                   Text="{Binding Nom, Mode=TwoWay}"></TextBlock>
-        <TextBlock Grid.Row="1" x:Name="tbDataInici" 
-                   Text="{Binding DataInici, Mode=TwoWay, Converter={StaticResource DateToStringFormatConverter}}"></TextBlock>
+                   Text="{Binding Nom, Mode=TwoWay}"
+                   FontWeight="SemiBold"></TextBlock>
+        <TextBlock x:Name="tbModalitat"
+                   Text="{Binding Modalitat.Descripcio, Mode=TwoWay}"
+                   Grid.Row="1"
+                   Foreground="Gray"
+                   FontWeight="SemiBold"></TextBlock>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock x:Name="tbDataInici" 
+                       Text="{Binding DataInici, Mode=TwoWay, Converter={StaticResource DateToStringFormatConverter}}"
+                       Foreground="Gray"></TextBlock>
+            <TextBlock Text="-" Foreground="Gray" Margin="5, 0"></TextBlock>
+            <TextBlock x:Name="tbDataFi" 
+                       Text="{Binding DataFi, Mode=TwoWay, Converter={StaticResource DateToStringFormatConverter}}"
+                       Foreground="Gray"></TextBlock>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -75,7 +75,7 @@ namespace GestioTornejos.UI
             {
                 if (isNou)
                 {
-                    Torneig nouTorneig = new Torneig(-1, (Modalitat)cbModalitats.SelectedItem, tbNom.Text, dpDataInici.Date.DateTime, true);
+                    Torneig nouTorneig = new Torneig(-1, (Modalitat)cbModalitats.SelectedItem, tbNom.Text, dpDataInici.Date.DateTime, dpDataFi.Date.DateTime, true);
                     TorneigDB.InsertOrUdate(nouTorneig);
                     Torneig = nouTorneig;
                     mainPageShared.OcTornejos.Add(Torneig);
@@ -84,6 +84,7 @@ namespace GestioTornejos.UI
                 {
                     Torneig.Nom = tbNom.Text;
                     Torneig.DataInici = dpDataInici.Date.DateTime;
+                    Torneig.DataFi = dpDataFi.Date.DateTime;
                     Torneig.Modalitat = (Modalitat) cbModalitats.SelectedItem;
                     TorneigDB.InsertOrUdate(Torneig);
                 }
@@ -99,12 +100,33 @@ namespace GestioTornejos.UI
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            if (TorneigDB.Delete(mainPageShared.OcTornejos[mainPageShared.IdxSelected].Id))
+            EliminarConfirmDialog();
+        }
+
+        private async void EliminarConfirmDialog()
+        {
+            ContentDialog locationPromptDialog = new ContentDialog
             {
-                mainPageShared.OcTornejos.Remove(mainPageShared.OcTornejos[mainPageShared.IdxSelected]);
-                if (mainPageShared.LvTornejos.Items.Count > 0)
+                Title = "Eliminar torneig",
+                Content = "Estàs segur que vols eliminar aquest torneig?",
+                CloseButtonText = "Cancel·la",
+                PrimaryButtonText = "Acceptar"
+            };
+
+            ContentDialogResult result = await locationPromptDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                if (TorneigDB.Delete(mainPageShared.OcTornejos[mainPageShared.IdxSelected].Id))
                 {
-                    mainPageShared.LvTornejos.SelectedIndex = 0;
+                    mainPageShared.OcTornejos.Remove(mainPageShared.OcTornejos[mainPageShared.IdxSelected]);
+                    if (mainPageShared.LvTornejos.Items.Count > 0)
+                    {
+                        mainPageShared.LvTornejos.SelectedIndex = 0;
+                        mainPageShared.IdxSelected = 0;
+                        Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);
+                        populateForm();
+                    }
                 }
             }
         }
@@ -115,6 +137,7 @@ namespace GestioTornejos.UI
             {
                 tbNom.Text = Torneig.Nom;
                 dpDataInici.Date = Torneig.DataInici;
+                dpDataFi.Date = Torneig.DataFi;
                 cbModalitats.SelectedIndex = Torneig.Modalitat.Id - 1;
             }
         }
@@ -152,12 +175,34 @@ namespace GestioTornejos.UI
 
             if (dpDataInici.Date.DateTime < DateTime.Now)
             {
+                DialogBox.Show("Error", "La data de inici ha de ser major que avui");
                 dpDataInici.Background = new SolidColorBrush(Colors.Red);
                 status = false;
             }
             else
             {
-                tbNom.Background = new SolidColorBrush(Colors.Transparent);
+                dpDataInici.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            if (dpDataFi.Date.DateTime < DateTime.Now)
+            {
+                DialogBox.Show("Error", "La data de fi ha de ser major que avui");
+                dpDataFi.Background = new SolidColorBrush(Colors.Red);
+                status = false;
+            }
+            else
+            {
+                dpDataFi.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            if (dpDataInici.Date.DateTime > dpDataFi.Date.DateTime)
+            {
+                DialogBox.Show("Error", "La data de inici ha de ser menor a la data de fi");
+                status = false;
+            }
+            else
+            {
+                dpDataInici.Background = new SolidColorBrush(Colors.Transparent);
             }
 
             return status;

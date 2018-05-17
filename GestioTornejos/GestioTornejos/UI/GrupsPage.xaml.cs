@@ -68,6 +68,7 @@ namespace GestioTornejos.UI
         {
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             populateForm();
+            EnableForm();
             isNou = false;
         }
 
@@ -156,7 +157,46 @@ namespace GestioTornejos.UI
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
+            EliminarConfirmDialog();
+        }
 
+        private async void EliminarConfirmDialog()
+        {
+            ContentDialog locationPromptDialog = new ContentDialog
+            {
+                Title = "Eliminar torneig",
+                Content = "Estàs segur que vols eliminar aquest torneig?",
+                CloseButtonText = "Cancel·la",
+                PrimaryButtonText = "Acceptar"
+            };
+
+            ContentDialogResult result = await locationPromptDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                if (GrupDB.Delete(grup))
+                {
+                    foreach(Inscripcio inscripcio in grup.Inscripcions)
+                    {
+                        inscripcionsCopia.Add(inscripcio);
+                    }
+
+                    grup.Inscripcions.Clear();
+                    inscripcionsGrupCopia.Clear();
+
+                    Torneig.Grups.Remove(grup);
+                    lvInscrits.ItemsSource = inscripcionsCopia;
+                    lvGrups.ItemsSource = Torneig.Grups;
+
+                    if (lvGrups.Items.Count > 0)
+                    {
+                        lvGrups.SelectedIndex = 0;
+                        mainPageShared.IdxSelected = 0;
+                    }
+
+                    grup = null;
+                }
+            }
         }
 
         private void tbCarambolesVictoria_KeyDown(object sender, KeyRoutedEventArgs e)

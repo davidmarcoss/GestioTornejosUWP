@@ -103,6 +103,7 @@
     <Compile Include="DB\MySQL.cs" />
     <Compile Include="DB\SociDB.cs" />
     <Compile Include="DB\TorneigDB.cs" />
+    <Compile Include="Models\DialogBox.cs" />
     <Compile Include="Models\Inscripcio.cs" />
     <Compile Include="Models\Soci.cs" />
     <Compile Include="UI\GrupItemRow.xaml.cs">

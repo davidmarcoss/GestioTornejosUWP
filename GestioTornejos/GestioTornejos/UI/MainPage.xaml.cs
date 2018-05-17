@@ -36,7 +36,7 @@ namespace GestioTornejos
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ocTornejos = TorneigDB.Get();
+            ocTornejos = TorneigDB.Get(-1, "", "");
 
             lvTornejos.ItemsSource = ocTornejos;
 
@@ -49,6 +49,8 @@ namespace GestioTornejos
             }
 
             frameDades.Navigate(typeof(DadesPage), mainPageShared);
+
+            dpDataFrom.IsEnabled = dpDataTo.IsEnabled = false;
         }
 
         private void actionPivots_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -82,7 +84,41 @@ namespace GestioTornejos
 
         private void btnAplicarFiltres_Click(object sender, RoutedEventArgs e)
         {
+            int estat = cbEstats.SelectedIndex - 1;
+            String dataFrom = "";
+            String dataTo = "";
 
+            if (cbFiltreDates.IsChecked == true)
+            {
+                dataFrom = dpDataFrom.Date.DateTime.ToString("yyyy-MM-dd");
+                dataTo = dpDataTo.Date.DateTime.ToString("yyyy-MM-dd");
+            }
+
+            ocTornejos = TorneigDB.Get(estat, dataFrom, dataTo);
+            lvTornejos.ItemsSource = ocTornejos;
+        }
+
+        private void dpDataFrom_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            
+        }
+
+        private void dpDataTo_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            if(dpDataTo.Date.DateTime < dpDataFrom.Date.DateTime)
+            {
+                DialogBox.Show("Error", "La data dos ha de ser més gran que la primera");
+            }
+        }
+
+        private void cbFiltreDates_Checked(object sender, RoutedEventArgs e)
+        {  
+            dpDataFrom.IsEnabled = dpDataTo.IsEnabled = true;
+        }
+
+        private void cbFiltreDates_Unchecked(object sender, RoutedEventArgs e)
+        {
+            dpDataFrom.IsEnabled = dpDataTo.IsEnabled = false;
         }
     }
 }

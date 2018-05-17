@@ -11,7 +11,7 @@ namespace GestioTornejos.DB
 {
     public class TorneigDB : DB
     {
-        public static ObservableCollection<Torneig> Get(int preinscripcioOberta = 0)
+        public static ObservableCollection<Torneig> Get(int preinscripcioOberta, String dataFrom = null, String dataTo = null)
         {
             ObservableCollection<Torneig> tornejos = new ObservableCollection<Torneig>();
 
@@ -21,10 +21,13 @@ namespace GestioTornejos.DB
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
                     consulta.CommandText = @"select * from tornejos
-                                            where (@p_preinscripcioOberta = 0 or preinscripcio_oberta = @p_preinscripcioOberta)
+                                            where (@p_preinscripcioOberta = -1 or preinscripcio_oberta = @p_preinscripcioOberta)
+                                            and (@p_dataFrom = '' or @p_dataTo = '') or (data_inici >= @p_dataFrom and data_inici <= @p_dataTo)
                                             and actiu = 1";
 
                     AddParameter(consulta, "p_preinscripcioOberta", preinscripcioOberta, MySqlDbType.Int32);
+                    AddParameter(consulta, "p_dataFrom", dataFrom, MySqlDbType.String);
+                    AddParameter(consulta, "p_dataTo", dataTo, MySqlDbType.String);
 
                     MySqlDataReader reader = consulta.ExecuteReader();
                     while (reader.Read())
@@ -35,7 +38,7 @@ namespace GestioTornejos.DB
                         int modalitatId = (int)fila["modalitat_id"];
 
                         Modalitat modalitat = ModalitatDB.GetById(modalitatId);
-                        Torneig torneig = new Torneig(torneigId, modalitat, (string)fila["nom"], (DateTime)fila["data_inici"], (bool)reader["preinscripcio_oberta"]);
+                        Torneig torneig = new Torneig(torneigId, modalitat, (string)fila["nom"], (DateTime)fila["data_inici"], (DateTime)fila["data_fi"], (bool)reader["preinscripcio_oberta"]);
                         torneig.Grups = GrupDB.GetByTorneig(torneigId);
                         torneig.Inscripcions = InscripcioDB.GetByTorneig(torneigId);
 
@@ -75,11 +78,11 @@ namespace GestioTornejos.DB
                     bool esInsert = (torneig.Id <= 0);
                     if (esInsert)
                     {
-                        consulta.CommandText = "insert into tornejos (modalitat_id, nom, data_inici, preinscripcio_oberta, actiu) values (@p_modalitatId, @p_nom, @p_dataInici, 1, 1)";
+                        consulta.CommandText = "insert into tornejos (modalitat_id, nom, data_inici, data_fi, preinscripcio_oberta, actiu) values (@p_modalitatId, @p_nom, @p_dataInici, @p_dataFi, 1, 1)";
                     }
                     else
                     {
-                        consulta.CommandText = @"update tornejos set modalitat_id=@p_modalitatId, nom=@p_nom, data_inici=@p_dataInici, preinscripcio_oberta=@p_preinscripcioOberta, actiu=1  
+                        consulta.CommandText = @"update tornejos set modalitat_id=@p_modalitatId, nom=@p_nom, data_inici=@p_dataInici, data_fi=@p_dataFi, preinscripcio_oberta=@p_preinscripcioOberta, actiu=1  
                                                  where id = @p_id";
                     }
 
@@ -87,6 +90,7 @@ namespace GestioTornejos.DB
                     AddParameter(consulta, "p_modalitatId", torneig.Modalitat.Id, MySqlDbType.Int32);
                     AddParameter(consulta, "p_nom", torneig.Nom, MySqlDbType.String);
                     AddParameter(consulta, "p_dataInici", torneig.DataInici.ToString("yyyy-MM-dd"), MySqlDbType.String);
+                    AddParameter(consulta, "p_dataFi", torneig.DataFi.ToString("yyyy-MM-dd"), MySqlDbType.String);
                     AddParameter(consulta, "p_preinscripcioOberta", torneig.PreinscripcioOberta ? 1 : 0, MySqlDbType.Int32);
 
                     try

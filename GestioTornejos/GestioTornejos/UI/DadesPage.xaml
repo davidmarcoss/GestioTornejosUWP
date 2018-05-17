@@ -14,6 +14,7 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -26,11 +27,14 @@
         <DatePicker Grid.Row="1" x:Name="dpDataInici" 
                     Header="Data Inici"
                     ></DatePicker>
-        <ComboBox Grid.Row="2" x:Name="cbModalitats" 
+        <DatePicker Grid.Row="2" x:Name="dpDataFi" 
+                    Header="Data Fi"
+                    ></DatePicker>
+        <ComboBox Grid.Row="3" x:Name="cbModalitats" 
                   Header="Modalitat"
                   ></ComboBox>
-        <Button Grid.Row="3" x:Name="btnTancarPreinscripcions" Click="btnTancarPreinscripcions_Click">Tancar preinscripcions</Button>
-        <StackPanel Grid.Row="4" Orientation="Horizontal">
+        <Button Grid.Row="4" x:Name="btnTancarPreinscripcions" Click="btnTancarPreinscripcions_Click">Tancar preinscripcions</Button>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
             <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
             <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="5 0 0 0">Cancelar</Button>
             <Button x:Name="btnCrear" Click="btnCrear_Click" Margin="5 0 0 0">Crear torneig</Button>

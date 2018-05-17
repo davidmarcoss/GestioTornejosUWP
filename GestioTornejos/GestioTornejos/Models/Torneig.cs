@@ -76,12 +76,13 @@ namespace GestioTornejos.Models
             set { inscripcions = value; }
         }
 
-        public Torneig(int id, Modalitat modalitat, string nom, DateTime dataInici, bool preinscripcioOberta)
+        public Torneig(int id, Modalitat modalitat, string nom, DateTime dataInici, DateTime dataFi, bool preinscripcioOberta)
         {
             Id = id;
             Modalitat = modalitat;
             Nom = nom;
             DataInici = dataInici;
+            DataFi = dataFi;
             PreinscripcioOberta = preinscripcioOberta;
         }
     }

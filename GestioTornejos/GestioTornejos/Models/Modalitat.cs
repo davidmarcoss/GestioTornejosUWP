@@ -9,6 +9,8 @@ namespace GestioTornejos.Models
 {
     public class Modalitat : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private int id;
 
         public int Id
@@ -19,7 +21,6 @@ namespace GestioTornejos.Models
 
         private String descripcio;
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public String Descripcio
         {

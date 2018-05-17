@@ -22,30 +22,47 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Background="LightGray">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"></RowDefinition>
-                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+                <RowDefinition Height="6*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Padding="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1.5*"></RowDefinition>
-                    <RowDefinition Height="4*"></RowDefinition>
-                    <RowDefinition Height="4*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" 
                            Text="Filtres"
                            FontWeight="Bold"></TextBlock>
 
-                <DatePicker Grid.Row="1" 
-                            Header="Data"
-                            HorizontalAlignment="Stretch"></DatePicker>
-                <!--
-                <ComboBox Grid.Row="2" 
+                <CheckBox x:Name="cbFiltreDates" Grid.Row="1" Checked="cbFiltreDates_Checked" Unchecked="cbFiltreDates_Unchecked">Filtrar per dates</CheckBox>
+                
+                <DatePicker Grid.Row="2" 
+                            Header="Entre dates"
+                            HorizontalAlignment="Stretch"
+                            MinWidth="270"
+                            x:Name="dpDataFrom"
+                            DateChanged="dpDataFrom_DateChanged"></DatePicker>
+
+                <DatePicker Grid.Row="3" 
+                            HorizontalAlignment="Stretch"
+                            MinWidth="270"
+                            x:Name="dpDataTo"
+                            DateChanged="dpDataTo_DateChanged"></DatePicker>
+                
+                <ComboBox Grid.Row="4" 
                           Header="Estat"
-                          HorizontalAlignment="Stretch">
+                          HorizontalAlignment="Stretch"
+                          x:Name="cbEstats">
+                    <ComboBoxItem Content="TOTS"></ComboBoxItem>
                     <ComboBoxItem Content="PENDENT"></ComboBoxItem>
                     <ComboBoxItem Content="JUGAT"></ComboBoxItem>
-                </ComboBox>-->
-                <Button Grid.Row="2" x:Name="btnAplicarFiltres" Click="btnAplicarFiltres_Click">Cercar</Button>
+                </ComboBox>
+                
+                <Button Grid.Row="5" x:Name="btnAplicarFiltres" Click="btnAplicarFiltres_Click">Cercar</Button>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
