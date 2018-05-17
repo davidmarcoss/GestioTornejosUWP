@@ -36,17 +36,14 @@ namespace GestioTornejos.UI
         {
             mainPageShared = (Shared)e.Parameter;
 
-            Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);
+            Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);           
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (Inscripcio inscripcio in Torneig.Inscripcions)
-            {
-                lvInscrits.Items.Add(inscripcio.Soci);
-            }
-
             lvGrups.ItemsSource = Torneig.Grups;
+
+            lvInscrits.ItemsSource = Torneig.Inscripcions;
 
             isNou = true;
         }
@@ -89,14 +86,7 @@ namespace GestioTornejos.UI
                 tbDescripcio.Text = grup.Descripcio;
                 tbCarambolesVictoria.Text = grup.CarambolesVictoria.ToString();
                 tbLimitEntrades.Text = grup.LimitEntrades.ToString();
-                lvInscrits.Items.Clear();
-                foreach(Inscripcio inscripcio in Torneig.Inscripcions)
-                {
-                    if (inscripcio.Grup != null && inscripcio.Grup.Equals(grup))
-                    {
-                        
-                    }
-                }
+                lvInscritsGrup.ItemsSource = grup.Inscripcions;
             }
         }
 

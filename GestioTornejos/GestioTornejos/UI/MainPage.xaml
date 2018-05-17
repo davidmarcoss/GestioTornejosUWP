@@ -38,13 +38,14 @@
                 <DatePicker Grid.Row="1" 
                             Header="Data"
                             HorizontalAlignment="Stretch"></DatePicker>
-
+                <!--
                 <ComboBox Grid.Row="2" 
                           Header="Estat"
                           HorizontalAlignment="Stretch">
                     <ComboBoxItem Content="PENDENT"></ComboBoxItem>
                     <ComboBoxItem Content="JUGAT"></ComboBoxItem>
-                </ComboBox>
+                </ComboBox>-->
+                <Button Grid.Row="2" x:Name="btnAplicarFiltres" Click="btnAplicarFiltres_Click">Cercar</Button>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>

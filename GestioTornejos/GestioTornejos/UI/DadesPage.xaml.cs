@@ -65,6 +65,7 @@ namespace GestioTornejos.UI
                     Torneig nouTorneig = new Torneig(-1, (Modalitat)cbModalitats.SelectedItem, tbNom.Text, dpDataInici.Date.DateTime, true);
                     TorneigDB.InsertOrUdate(nouTorneig);
                     Torneig = nouTorneig;
+                    mainPageShared.OcTornejos.Add(Torneig);
                 }
                 else
                 {
@@ -136,7 +137,7 @@ namespace GestioTornejos.UI
                 tbNom.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            if (dpDataInici.Date.DateTime < DateTime.Now)
+            /*if (dpDataInici.Date.DateTime < DateTime.Now)
             {
                 dpDataInici.Background = new SolidColorBrush(Colors.Red);
                 status = false;
@@ -144,7 +145,7 @@ namespace GestioTornejos.UI
             else
             {
                 tbNom.Background = new SolidColorBrush(Colors.Transparent);
-            }
+            }*/
 
             return status;
         }

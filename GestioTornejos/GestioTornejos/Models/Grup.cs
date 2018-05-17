@@ -60,5 +60,17 @@ namespace GestioTornejos.Models
             LimitEntrades = limitEntrades;
             inscripcions = new ObservableCollection<Inscripcio>();
         }
+
+        public override bool Equals(object obj)
+        {
+            var grup = obj as Grup;
+            return grup != null &&
+                   Id == grup.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return 2108858624 + Id.GetHashCode();
+        }
     }
 }

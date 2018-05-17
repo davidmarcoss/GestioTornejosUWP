@@ -33,8 +33,8 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="6*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -70,17 +70,15 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="1" Margin="20, 60, 0, 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="9*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <TextBlock VerticalAlignment="center" 
-                               Text="Selecciona els socis"></TextBlock>
-                </Grid>
-                <ScrollViewer Grid.Row="1">
-                    <ListView x:Name="lvInscrits"
-                                SelectionMode="Multiple"></ListView>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Column="0">
+                    <ListView x:Name="lvInscrits" Header="Inscrits"></ListView>
+                </ScrollViewer>
+                <ScrollViewer Grid.Column="1">
+                    <ListView x:Name="lvInscritsGrup" Header="Inscrits al grup"></ListView>
                 </ScrollViewer>
             </Grid>
         </Grid>
@@ -88,7 +86,7 @@
             <ScrollViewer>
                 <ListView x:Name="lvGrups" 
                           ItemTemplate="{StaticResource DataTemplateItem}" 
-                          HeaderTemplate="{StaticResource DataTemplateHeader}" ItemContainerStyle="{StaticResource ListViewGrupStyle}"></ListView>
+                          HeaderTemplate="{StaticResource DataTemplateHeader}"></ListView>
             </ScrollViewer>
         </Grid>
     </Grid>

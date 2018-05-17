@@ -32,7 +32,15 @@ namespace GestioTornejos.DB
 
                         Soci soci = SociDB.GetById((int)reader["soci_id"]);
                         Inscripcio inscripcio = new Inscripcio((int)reader["id"], (DateTime)reader["data_creacio"], soci);
- 
+                        try
+                        {
+                            inscripcio.Grup = GrupDB.GetById((int)reader["grup_id"]);
+                        } 
+                        catch(NullReferenceException ex)
+                        {
+
+                        }
+                        
                         inscripcions.Add(inscripcio);
                     }
                 }

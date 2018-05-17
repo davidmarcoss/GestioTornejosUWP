@@ -42,6 +42,35 @@ namespace GestioTornejos.DB
             return grups;
         }
 
+        public static Grup GetById(int id = 0)
+        {
+            Grup grup = null;
+
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.CommandText = @"select * from grups
+                                            where id = @p_id";
+
+                    AddParameter(consulta, "p_id", id, MySqlDbType.Int32);
+
+                    MySqlDataReader reader = consulta.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Dictionary<string, object> fila = getFila(reader);
+
+                        grup = new Grup((int)fila["id"], (string)fila["descripcio"], (int)fila["caramboles_victoria"], (int)fila["limit_entrades"]);
+                    }
+                }
+
+                connexio.Close();
+            }
+
+            return grup;
+        }
+
         public static bool Insert(Torneig torneig, Grup grup)
         {
             using (MySqlConnection connexio = MySQL.GetConnexio())

@@ -79,5 +79,10 @@ namespace GestioTornejos
                 }
             }
         }
+
+        private void btnAplicarFiltres_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

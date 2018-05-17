@@ -39,6 +39,18 @@ namespace GestioTornejos.DB
                         torneig.Grups = GrupDB.GetByTorneig(torneigId);
                         torneig.Inscripcions = InscripcioDB.GetByTorneig(torneigId);
 
+                        foreach(Grup grup in torneig.Grups)
+                        {
+                            for (int i = torneig.Inscripcions.Count - 1; i >= 0; i--)
+                            {
+                                if (torneig.Inscripcions[i].Grup != null && torneig.Inscripcions[i].Grup.Equals(grup))
+                                {
+                                    grup.Inscripcions.Add(torneig.Inscripcions[i]);
+                                    torneig.Inscripcions.RemoveAt(i);
+                                }
+                            }
+                        }
+
                         tornejos.Add(torneig);
                     }
                 }

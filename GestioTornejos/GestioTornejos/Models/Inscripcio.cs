@@ -46,5 +46,10 @@ namespace GestioTornejos.Models
             DataCreacio = dataCreacio;
             Soci = soci;
         }
+
+        public override string ToString()
+        {
+            return Soci.Nom + " " + Soci.Cognom1 + " " + Soci.Cognom2;
+        }
     }
 }
