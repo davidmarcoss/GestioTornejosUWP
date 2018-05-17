@@ -154,5 +154,48 @@ namespace GestioTornejos.DB
                 }
             }
         }
+
+        public static bool TancarPreinscripcions(Torneig torneig)
+        {
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+
+                MySqlTransaction trans = connexio.BeginTransaction();
+
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.Transaction = trans;
+
+                    consulta.CommandText = @"update tornejos set preinscripcio_oberta = @p_preinscripcioOberta  
+                                                where id = @p_id";
+        
+
+                    AddParameter(consulta, "p_id", torneig.Id, MySqlDbType.Int32);
+                    AddParameter(consulta, "p_preinscripcioOberta", 0, MySqlDbType.Int32);
+
+                    try
+                    {
+                        int numRows = consulta.ExecuteNonQuery();
+                        if (numRows != 1)
+                        {
+                            trans.Rollback();
+                        }
+                        else
+                        {
+                            trans.Commit();
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+        }
     }
 }

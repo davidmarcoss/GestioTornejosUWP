@@ -28,8 +28,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition Height="5*"></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -38,56 +39,53 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Padding="10">
-                    <TextBlock VerticalAlignment="center" 
-                               Text="Creació de grups"
-                               FontSize="20"></TextBlock>
-                </Grid>
-                <Grid Grid.Row="1" Padding="10">
                     <TextBox x:Name="tbDescripcio" Header="Descripció"
                              VerticalAlignment="center"></TextBox>
                 </Grid>
-                <Grid Grid.Row="2" Padding="10">
+                <Grid Grid.Row="1" Padding="10">
                     <TextBox x:Name="tbCarambolesVictoria" KeyDown="tbCarambolesVictoria_KeyDown" Header="Caramboles per a la victoria"
                              VerticalAlignment="center"></TextBox>
                 </Grid>
-                <Grid Grid.Row="3" Padding="10">
+                <Grid Grid.Row="2" Padding="10">
                     <TextBox x:Name="tbLimitEntrades" KeyDown="tbLimitEntrades_KeyDown" Header="Límit de entrades"
                              VerticalAlignment="center"></TextBox>
                 </Grid>
-                <StackPanel Grid.Row="4" Orientation="Horizontal">
-                    <Button x:Name="btnCrear" Click="btnCrear_Click">Crear</Button>
-                    <Button x:Name="btnGuardar" Click="btnGuardar_Click" Margin="5 0 0 0">Guardar</Button>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Padding="10">
+                    <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
                     <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="5 0 0 0">Cancelar</Button>
+                    <Button x:Name="btnCrear" Click="btnCrear_Click" Margin="5 0 0 0">Crear grup</Button>
                     <Button x:Name="btnEliminar" Click="btnEliminar_Click" Margin="5 0 0 0"
                     Background="White" Foreground="Red">Eliminar</Button>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Column="1" Margin="20, 60, 0, 0">
+            <Grid Grid.Column="1" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Column="0">
-                    <ListView x:Name="lvInscrits" Header="Inscrits"></ListView>
+                    <ListView x:Name="lvInscrits" Header="Inscrits" Tapped="lvInscrits_Tapped"></ListView>
                 </ScrollViewer>
                 <ScrollViewer Grid.Column="1">
-                    <ListView x:Name="lvInscritsGrup" Header="Inscrits al grup"></ListView>
+                    <ListView x:Name="lvInscritsGrup" Header="Inscrits al grup" Tapped="lvInscritsGrup_Tapped"></ListView>
                 </ScrollViewer>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
-            <ScrollViewer>
+            <ScrollViewer Padding="10">
                 <ListView x:Name="lvGrups" 
                           ItemTemplate="{StaticResource DataTemplateItem}" 
                           HeaderTemplate="{StaticResource DataTemplateHeader}"></ListView>
             </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button x:Name="btnEmparellaments" Click="btnEmparellaments_Click">Tancar grups i fer emparellaments</Button>
         </Grid>
     </Grid>
 </Page>

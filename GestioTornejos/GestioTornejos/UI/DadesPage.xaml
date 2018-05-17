@@ -7,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"></ColumnDefinition>
@@ -28,10 +29,11 @@
         <ComboBox Grid.Row="2" x:Name="cbModalitats" 
                   Header="Modalitat"
                   ></ComboBox>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Button x:Name="btnCrear" Click="btnCrear_Click">Crear</Button>
-            <Button x:Name="btnGuardar" Click="btnGuardar_Click" Margin="5 0 0 0">Guardar</Button>
+        <Button Grid.Row="3" x:Name="btnTancarPreinscripcions" Click="btnTancarPreinscripcions_Click">Tancar preinscripcions</Button>
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
             <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="5 0 0 0">Cancelar</Button>
+            <Button x:Name="btnCrear" Click="btnCrear_Click" Margin="5 0 0 0">Crear torneig</Button>
             <Button x:Name="btnEliminar" Click="btnEliminar_Click" Margin="5 0 0 0"
                     Background="White" Foreground="Red">Eliminar</Button>
         </StackPanel>

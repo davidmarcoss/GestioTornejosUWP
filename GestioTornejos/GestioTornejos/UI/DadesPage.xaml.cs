@@ -21,7 +21,7 @@ namespace GestioTornejos.UI
 {
     public sealed partial class DadesPage : Page
     {
-        Shared mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), new ListView());
+        private Shared mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), new ListView());
         private bool isNou = false;
         private Torneig Torneig;
 
@@ -38,11 +38,11 @@ namespace GestioTornejos.UI
 
             if (!Torneig.PreinscripcioOberta)
             {
-                tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = false;
+                DisableForm();
             }
             else
             {
-                tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = true;
+                EnableForm();
             }
 
             cbModalitats.ItemsSource = ModalitatDB.Get();
@@ -50,10 +50,23 @@ namespace GestioTornejos.UI
             populateForm();
         }
 
+        private void EnableForm()
+        {
+            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = btnTancarPreinscripcions.IsEnabled =
+                btnGuardar.IsEnabled = btnEliminar.IsEnabled = btnCancelar.IsEnabled = true;
+        }
+
+        private void DisableForm()
+        {
+            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = btnTancarPreinscripcions.IsEnabled =
+                btnGuardar.IsEnabled = btnEliminar.IsEnabled = btnCancelar.IsEnabled = false;
+        }
+
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             isNou = true;
             resetForm();
+            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = true;
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -137,7 +150,7 @@ namespace GestioTornejos.UI
                 tbNom.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            /*if (dpDataInici.Date.DateTime < DateTime.Now)
+            if (dpDataInici.Date.DateTime < DateTime.Now)
             {
                 dpDataInici.Background = new SolidColorBrush(Colors.Red);
                 status = false;
@@ -145,9 +158,16 @@ namespace GestioTornejos.UI
             else
             {
                 tbNom.Background = new SolidColorBrush(Colors.Transparent);
-            }*/
+            }
 
             return status;
+        }
+
+        private void btnTancarPreinscripcions_Click(object sender, RoutedEventArgs e)
+        {
+            Torneig.PreinscripcioOberta = false;
+            TorneigDB.TancarPreinscripcions(Torneig);
+            DisableForm();
         }
     }
 }

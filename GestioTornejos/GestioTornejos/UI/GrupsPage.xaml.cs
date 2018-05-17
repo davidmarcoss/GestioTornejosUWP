@@ -1,19 +1,11 @@
 ﻿using GestioTornejos.DB;
 using GestioTornejos.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -22,10 +14,12 @@ namespace GestioTornejos.UI
 {
     public sealed partial class GrupsPage : Page
     {
-        Shared mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), new ListView());
+        private Shared mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), new ListView());
         private Torneig Torneig;
         private Grup grup;
         private bool isNou;
+        private ObservableCollection<Inscripcio> inscripcionsCopia;
+        private ObservableCollection<Inscripcio> inscripcionsGrupCopia;
 
         public GrupsPage()
         {
@@ -43,15 +37,38 @@ namespace GestioTornejos.UI
         {
             lvGrups.ItemsSource = Torneig.Grups;
 
-            lvInscrits.ItemsSource = Torneig.Inscripcions;
+            inscripcionsCopia = new ObservableCollection<Inscripcio>(Torneig.Inscripcions);
+            lvInscrits.ItemsSource = inscripcionsCopia;
 
             isNou = true;
+
+            if (Torneig.PreinscripcioOberta)
+            {
+                DisableForm();
+            }
+            else
+            {
+                EnableForm();
+            }
+        }
+
+        private void DisableForm()
+        {
+            tbDescripcio.IsEnabled = tbCarambolesVictoria.IsEnabled = tbLimitEntrades.IsEnabled = btnGuardar.IsEnabled 
+                = btnCancelar.IsEnabled = btnCrear.IsEnabled = btnEliminar.IsEnabled = false;
+        }
+
+        private void EnableForm()
+        {
+            tbDescripcio.IsEnabled = tbCarambolesVictoria.IsEnabled = tbLimitEntrades.IsEnabled = btnGuardar.IsEnabled
+                = btnCancelar.IsEnabled = btnCrear.IsEnabled = btnEliminar.IsEnabled = true;
         }
 
         private void GrupItemRow_Tapped(object sender, TappedRoutedEventArgs e)
         {
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             populateForm();
+            isNou = false;
         }
 
         private void resetForm()
@@ -86,7 +103,8 @@ namespace GestioTornejos.UI
                 tbDescripcio.Text = grup.Descripcio;
                 tbCarambolesVictoria.Text = grup.CarambolesVictoria.ToString();
                 tbLimitEntrades.Text = grup.LimitEntrades.ToString();
-                lvInscritsGrup.ItemsSource = grup.Inscripcions;
+                inscripcionsGrupCopia = new ObservableCollection<Inscripcio>(grup.Inscripcions);
+                lvInscritsGrup.ItemsSource = inscripcionsGrupCopia;
             }
         }
 
@@ -99,25 +117,12 @@ namespace GestioTornejos.UI
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            ObservableCollection<Soci> socisSeleccionats = new ObservableCollection<Soci>();
-            foreach (Object item in lvInscrits.SelectedItems)
-            {
-                socisSeleccionats.Add((Soci)item);
-            }
-
             if (checkForm())
             {
                 if (isNou)
                 {
                     Grup nouGrup = new Grup(-1, tbDescripcio.Text, Int32.Parse(tbCarambolesVictoria.Text), Int32.Parse(tbLimitEntrades.Text));
-                    foreach(Soci soci in socisSeleccionats)
-                    {
-                        Inscripcio inscripcio = Torneig.Inscripcions.Single(Ins => Ins.Soci.Equals(soci));
-                        if (inscripcio != null)
-                        {
-                            nouGrup.Inscripcions.Add(inscripcio);
-                        }
-                    }
+                    nouGrup.Inscripcions = new ObservableCollection<Inscripcio>(inscripcionsGrupCopia);
                     GrupDB.Insert(Torneig, nouGrup);
 
                     grup = nouGrup;
@@ -128,16 +133,25 @@ namespace GestioTornejos.UI
                     grup.Descripcio = tbDescripcio.Text;
                     grup.CarambolesVictoria = Int32.Parse(tbCarambolesVictoria.Text);
                     grup.LimitEntrades = Int32.Parse(tbLimitEntrades.Text);
+                    grup.Inscripcions = new ObservableCollection<Inscripcio>(inscripcionsGrupCopia);
                     GrupDB.Update(Torneig, grup);
                 }
 
                 populateForm();
             }
+
+            Torneig.Inscripcions = new ObservableCollection<Inscripcio>(inscripcionsCopia);
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
             resetForm();
+            inscripcionsCopia = new ObservableCollection<Inscripcio>(Torneig.Inscripcions);
+            lvInscrits.ItemsSource = inscripcionsCopia;
+            inscripcionsGrupCopia = null;
+            lvInscritsGrup.ItemsSource = inscripcionsGrupCopia;
+            populateForm();
+            isNou = false;
         }
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
@@ -181,6 +195,37 @@ namespace GestioTornejos.UI
             }
 
             return true;
+        }
+
+        private void lvInscrits_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (lvGrups.SelectedIndex >= 0)
+            {
+                Inscripcio inscripcio = (Inscripcio)lvInscrits.SelectedItem;
+                if (inscripcio != null)
+                {
+                    inscripcionsGrupCopia.Add(inscripcio);
+                    inscripcionsCopia.Remove(inscripcio);
+                }
+            }
+        }
+
+        private void lvInscritsGrup_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (lvGrups.SelectedIndex >= 0)
+            {
+                Inscripcio inscripcio = (Inscripcio)lvInscritsGrup.SelectedItem;
+                if (inscripcio != null)
+                {
+                    inscripcionsCopia.Add(inscripcio);
+                    inscripcionsGrupCopia.Remove(inscripcio);
+                }
+            }
+        }
+
+        private void btnEmparellaments_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Fer emparellaments
         }
     }
 }

@@ -103,10 +103,9 @@ namespace GestioTornejos.DB
                         {
                             grup.Id = (int)consulta.LastInsertedId;
 
+                            consulta.CommandText = @"update inscripcions set grup_id=@p_grupId where id = @p_id";
                             AddParameter(consulta, "p_grupId", "", MySqlDbType.Int32);
                             AddParameter(consulta, "p_id", "", MySqlDbType.Int32);
-
-                            consulta.CommandText = @"update inscripcions set grup_id=@p_grupId where id = @p_id";
                             foreach (Inscripcio inscripcio in grup.Inscripcions)
                             {
                                 MySqlParameterCollection mspc = consulta.Parameters;
@@ -142,8 +141,11 @@ namespace GestioTornejos.DB
                 {
                     consulta.Transaction = trans;
 
-                    consulta.CommandText = @"update grups set descripcio=@p_descripcio, caramboles_victoria=@p_carambolesVictoria, limit_entrades=@p_limitEntrades  
-                                                 where id = @p_id";
+                    consulta.CommandText = @"update grups set 
+                                                descripcio=@p_descripcio, 
+                                                caramboles_victoria=@p_carambolesVictoria, 
+                                                limit_entrades=@p_limitEntrades  
+                                             where id = @p_id";
 
                     AddParameter(consulta, "p_id", grup.Id, MySqlDbType.Int32);
                     AddParameter(consulta, "p_descripcio", grup.Descripcio, MySqlDbType.String);
@@ -152,24 +154,27 @@ namespace GestioTornejos.DB
 
                     try
                     {
-                        int numRows = consulta.ExecuteNonQuery();
-                        if (numRows != 1)
+                        if (consulta.ExecuteNonQuery() != 1)
                         {
                             trans.Rollback();
                         }
                         else
                         {
+                            MySqlParameterCollection mspc = null;
+
+                            consulta.CommandText = @"update inscripcions set grup_id=NULL where grup_id = @p_grupId";
+                            AddParameter(consulta, "p_grupId", "", MySqlDbType.Int32);
+                            mspc = consulta.Parameters;
+                            mspc[mspc.IndexOf("p_grupId")].Value = grup.Id;
+                            consulta.ExecuteNonQuery();
+
                             consulta.CommandText = @"update inscripcions set grup_id=@p_grupId where id = @p_id";
-                            foreach(Inscripcio inscripcio in grup.Inscripcions)
+                            mspc = consulta.Parameters;
+                            mspc[mspc.IndexOf("p_grupId")].Value = grup.Id;
+                            foreach (Inscripcio inscripcio in grup.Inscripcions)
                             {
-                                AddParameter(consulta, "p_grupId", grup.Id, MySqlDbType.Int32);
-                                AddParameter(consulta, "p_id", inscripcio.Id, MySqlDbType.Int32);
-                                numRows = consulta.ExecuteNonQuery();
-                                if (numRows != 1)
-                                {
-                                    trans.Rollback();
-                                    break;
-                                }
+                                mspc[mspc.IndexOf("p_id")].Value = inscripcio.Id;
+                                consulta.ExecuteNonQuery();
                             }
 
                             trans.Commit();
