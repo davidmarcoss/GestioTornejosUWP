@@ -38,11 +38,11 @@ namespace GestioTornejos.UI
 
             if (!Torneig.PreinscripcioOberta)
             {
-                DisableForm();
+                FormEnabled(false);
             }
             else
             {
-                EnableForm();
+                FormEnabled(true);
             }
 
             cbModalitats.ItemsSource = ModalitatDB.Get();
@@ -50,16 +50,17 @@ namespace GestioTornejos.UI
             populateForm();
         }
 
-        private void EnableForm()
+        private void FormEnabled(bool status)
         {
-            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = btnTancarPreinscripcions.IsEnabled =
-                btnGuardar.IsEnabled = btnEliminar.IsEnabled = btnCancelar.IsEnabled = true;
-        }
-
-        private void DisableForm()
-        {
-            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = btnTancarPreinscripcions.IsEnabled =
-                btnGuardar.IsEnabled = btnEliminar.IsEnabled = btnCancelar.IsEnabled = false;
+            tbNom.IsEnabled 
+                = dpDataInici.IsEnabled
+                = dpDataFi.IsEnabled
+                = cbModalitats.IsEnabled 
+                = btnTancarPreinscripcions.IsEnabled 
+                = btnGuardar.IsEnabled 
+                = btnEliminar.IsEnabled 
+                = btnCancelar.IsEnabled 
+                = status;
         }
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
@@ -151,12 +152,10 @@ namespace GestioTornejos.UI
 
         private bool checkForm()
         {
-            bool status = true;
-
             if (tbNom.Text.Length <= 0 || tbNom.Text.Equals(""))
             {
                 tbNom.Background = new SolidColorBrush(Colors.Red);
-                status = false;
+                return false;
             }
             else
             {
@@ -166,7 +165,7 @@ namespace GestioTornejos.UI
             if (cbModalitats.SelectedIndex < 0)
             {
                 cbModalitats.Background = new SolidColorBrush(Colors.Red);
-                status = false;
+                return false;
             }
             else
             {
@@ -177,7 +176,7 @@ namespace GestioTornejos.UI
             {
                 DialogBox.Show("Error", "La data de inici ha de ser major que avui");
                 dpDataInici.Background = new SolidColorBrush(Colors.Red);
-                status = false;
+                return false;
             }
             else
             {
@@ -188,7 +187,7 @@ namespace GestioTornejos.UI
             {
                 DialogBox.Show("Error", "La data de fi ha de ser major que avui");
                 dpDataFi.Background = new SolidColorBrush(Colors.Red);
-                status = false;
+                return false;
             }
             else
             {
@@ -198,21 +197,21 @@ namespace GestioTornejos.UI
             if (dpDataInici.Date.DateTime > dpDataFi.Date.DateTime)
             {
                 DialogBox.Show("Error", "La data de inici ha de ser menor a la data de fi");
-                status = false;
+                return false;
             }
             else
             {
                 dpDataInici.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            return status;
+            return true;
         }
 
         private void btnTancarPreinscripcions_Click(object sender, RoutedEventArgs e)
         {
             Torneig.PreinscripcioOberta = false;
             TorneigDB.TancarPreinscripcions(Torneig);
-            DisableForm();
+            FormEnabled(false);
         }
     }
 }

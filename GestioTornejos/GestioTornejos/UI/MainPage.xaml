@@ -7,11 +7,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    Loaded="Page_Loaded"
+    Width="1920"
+    Height="1080">
 
     <Page.Resources>
         <DataTemplate x:Key="DataTemplateTorneigRow">
-            <localUI:TorneigItemRow Torneig="{Binding this}" Tapped="TorneigItemRow_Tapped"></localUI:TorneigItemRow>
+            <localUI:TorneigItemRow Torneig="{Binding this}"></localUI:TorneigItemRow>
         </DataTemplate>
     </Page.Resources>
 
@@ -20,7 +22,7 @@
             <ColumnDefinition Width="2*" MinWidth="300" MaxWidth="300"></ColumnDefinition>
             <ColumnDefinition Width="8*" MinWidth="700"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="LightGray">
+        <Grid Grid.Column="0" Background="#F9F9F9">
             <Grid.RowDefinitions>
                 <RowDefinition Height="4*"></RowDefinition>
                 <RowDefinition Height="6*"></RowDefinition>
@@ -73,7 +75,8 @@
                            FontWeight="Bold" Grid.Row="0"></TextBlock>
                 <ScrollViewer Grid.Row="1">
                     <ListView ItemContainerStyle="{StaticResource ListViewItemContainerStyle1}" x:Name="lvTornejos" Padding="0" Margin="0" 
-                              ItemTemplate="{StaticResource DataTemplateTorneigRow}"></ListView>
+                              ItemTemplate="{StaticResource DataTemplateTorneigRow}"
+                              SelectionChanged="lvTornejos_SelectionChanged"></ListView>
                 </ScrollViewer>
             </Grid>
         </Grid>
@@ -82,7 +85,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="1" Grid.Row="0">
+            <Grid Grid.Column="1" Grid.Row="0" Padding="10">
                 <Pivot x:Name="actionPivots" SelectionChanged="actionPivots_SelectionChanged">
                     <PivotItem Header="Dades">
                         <Grid>
@@ -92,6 +95,11 @@
                     <PivotItem Header="Grups">
                         <Grid>
                             <Frame x:Name="frameGrups"></Frame>
+                        </Grid>
+                    </PivotItem>
+                    <PivotItem Header="Classificacio">
+                        <Grid>
+                            <Frame x:Name="frameClassificacio"></Frame>
                         </Grid>
                     </PivotItem>
                 </Pivot>

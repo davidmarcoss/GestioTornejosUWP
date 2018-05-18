@@ -2,6 +2,7 @@
 using GestioTornejos.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -30,7 +31,7 @@ namespace GestioTornejos.UI
         {
             mainPageShared = (Shared)e.Parameter;
 
-            Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);           
+            Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -42,33 +43,41 @@ namespace GestioTornejos.UI
 
             isNou = true;
 
-            if (Torneig.PreinscripcioOberta)
+            if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
             {
-                DisableForm();
+                FormEnabled(false);
+                lvInscrits.IsEnabled = false;
+                lvInscritsGrup.IsEnabled = false;
+                lvGrups.IsEnabled = false;
             }
-            else
+        }
+
+        private void FormEnabled(bool status)
+        {
+            tbDescripcio.IsEnabled 
+                = tbCarambolesVictoria.IsEnabled 
+                = tbLimitEntrades.IsEnabled 
+                = btnGuardar.IsEnabled 
+                = btnCancelar.IsEnabled 
+                = btnCrear.IsEnabled 
+                = btnEliminar.IsEnabled
+                = status;
+        }
+
+
+        private void lvGrups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (inscripcionsGrupCopia != null && inscripcionsGrupCopia.Count >= 0)
             {
-                EnableForm();
+                foreach(Inscripcio inscripcio in inscripcionsGrupCopia)
+                {
+                    inscripcionsCopia.Add(inscripcio);
+                }
             }
-        }
 
-        private void DisableForm()
-        {
-            tbDescripcio.IsEnabled = tbCarambolesVictoria.IsEnabled = tbLimitEntrades.IsEnabled = btnGuardar.IsEnabled 
-                = btnCancelar.IsEnabled = btnCrear.IsEnabled = btnEliminar.IsEnabled = false;
-        }
-
-        private void EnableForm()
-        {
-            tbDescripcio.IsEnabled = tbCarambolesVictoria.IsEnabled = tbLimitEntrades.IsEnabled = btnGuardar.IsEnabled
-                = btnCancelar.IsEnabled = btnCrear.IsEnabled = btnEliminar.IsEnabled = true;
-        }
-
-        private void GrupItemRow_Tapped(object sender, TappedRoutedEventArgs e)
-        {
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             populateForm();
-            EnableForm();
+            FormEnabled(true);
             isNou = false;
         }
 
@@ -82,19 +91,37 @@ namespace GestioTornejos.UI
 
         private bool checkForm()
         {
-            bool status = true;
-
-            if (tbDescripcio.Text.Length <= 0 || tbDescripcio.Text.Equals(""))
+            if (tbDescripcio.Text.Equals(""))
             {
                 tbDescripcio.Background = new SolidColorBrush(Colors.Red);
-                status = false;
+                return false;
             }
             else
             {
                 tbDescripcio.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            return status;
+            if (tbCarambolesVictoria.Text.Equals(""))
+            {
+                tbCarambolesVictoria.Background = new SolidColorBrush(Colors.Red);
+                return false;
+            }
+            else
+            {
+                tbCarambolesVictoria.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            if (tbLimitEntrades.Text.Equals(""))
+            {
+                tbLimitEntrades.Background = new SolidColorBrush(Colors.Red);
+                return false;
+            }
+            else
+            {
+                tbLimitEntrades.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            return true;
         }
 
         private void populateForm()
@@ -157,7 +184,11 @@ namespace GestioTornejos.UI
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            EliminarConfirmDialog();
+            if (lvGrups.SelectedIndex >= 0)
+            {
+                EliminarConfirmDialog();
+            }
+
         }
 
         private async void EliminarConfirmDialog()
@@ -201,40 +232,34 @@ namespace GestioTornejos.UI
 
         private void tbCarambolesVictoria_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(e.Key.ToString(), "[0-9]"))
+            if (!e.Key.ToString().Contains("Number"))
             {
-                e.Handled = false;
+                e.Handled = true;
             }
             else
             {
-                e.Handled = true;
+                try
+                {
+                    Int32.Parse(tbCarambolesVictoria.Text + e.Key.ToString().Replace("Number", ""));
+                }
+                catch (OverflowException) { e.Handled = true; }
             }
         }
 
         private void tbLimitEntrades_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(e.Key.ToString(), "[0-9]"))
-            {
-                e.Handled = false;
-            }
-            else
+            if (!e.Key.ToString().Contains("Number"))
             {
                 e.Handled = true;
             }
-        }
-
-        private bool isNumeric(String text)
-        {
-            try
+            else
             {
-                Int32.Parse(text);
+                try
+                {
+                    Int32.Parse(tbLimitEntrades.Text + e.Key.ToString().Replace("Number", ""));
+                }
+                catch (OverflowException) { e.Handled = true; }
             }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         private void lvInscrits_Tapped(object sender, TappedRoutedEventArgs e)
@@ -265,7 +290,38 @@ namespace GestioTornejos.UI
 
         private void btnEmparellaments_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Fer emparellaments
+            /*if (inscripcionsCopia.Count >= 0)
+            {
+                DialogBox.Show("Error al generar emparellaments","Per a generar els emparellaments tens que tindre tots els inscrits a dins d'un grup");
+            }
+            else*/
+            {
+                foreach(Grup grup in Torneig.Grups)
+                {
+                    int cont = 0;
+                    foreach (Inscripcio inscripcio in grup.Inscripcions)
+                    {
+                        if (cont == grup.Inscripcions.Count - 1)
+                        {
+                            continue;
+                        }
+
+                        for (int i = grup.Inscripcions.IndexOf(inscripcio) + 1; i < grup.Inscripcions.Count; i++)
+                        {
+                            Inscripcio inscripcio2 = grup.Inscripcions[i];
+
+                            Partida partida = new Partida(-1, inscripcio.Soci, inscripcio2.Soci, grup, Torneig, 0, 0, 0, EstatPartida.PENDENT);
+
+                            Torneig.Partides.Add(partida);
+                        }
+
+                        cont++;
+                    }
+                }
+
+                PartidaDB.Insert(Torneig);
+            }
         }
+
     }
 }

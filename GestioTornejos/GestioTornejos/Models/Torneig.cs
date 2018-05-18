@@ -76,6 +76,22 @@ namespace GestioTornejos.Models
             set { inscripcions = value; }
         }
 
+        private ObservableCollection<Partida> partides;
+
+        public ObservableCollection<Partida> Partides
+        {
+            get { return partides; }
+            set { partides = value; }
+        }
+
+        private bool tePartides;
+
+        public bool TePartides
+        {
+            get { return tePartides; }
+            set { tePartides = value; }
+        }
+        
         public Torneig(int id, Modalitat modalitat, string nom, DateTime dataInici, DateTime dataFi, bool preinscripcioOberta)
         {
             Id = id;
@@ -84,6 +100,7 @@ namespace GestioTornejos.Models
             DataInici = dataInici;
             DataFi = dataFi;
             PreinscripcioOberta = preinscripcioOberta;
+            Partides = new ObservableCollection<Partida>();
         }
     }
 }

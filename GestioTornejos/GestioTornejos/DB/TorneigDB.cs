@@ -20,10 +20,10 @@ namespace GestioTornejos.DB
                 connexio.Open();
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.CommandText = @"select * from tornejos
-                                            where (@p_preinscripcioOberta = -1 or preinscripcio_oberta = @p_preinscripcioOberta)
-                                            and (@p_dataFrom = '' or @p_dataTo = '') or (data_inici >= @p_dataFrom and data_inici <= @p_dataTo)
-                                            and actiu = 1";
+                    consulta.CommandText = @"select t.* from tornejos t
+                                            where (@p_preinscripcioOberta = -1 or t.preinscripcio_oberta = @p_preinscripcioOberta)
+                                            and (@p_dataFrom = '' or @p_dataTo = '') or (t.data_inici >= @p_dataFrom and t.data_inici <= @p_dataTo)
+                                            and t.actiu = 1";
 
                     AddParameter(consulta, "p_preinscripcioOberta", preinscripcioOberta, MySqlDbType.Int32);
                     AddParameter(consulta, "p_dataFrom", dataFrom, MySqlDbType.String);
@@ -41,7 +41,7 @@ namespace GestioTornejos.DB
                         Torneig torneig = new Torneig(torneigId, modalitat, (string)fila["nom"], (DateTime)fila["data_inici"], (DateTime)fila["data_fi"], (bool)reader["preinscripcio_oberta"]);
                         torneig.Grups = GrupDB.GetByTorneig(torneigId);
                         torneig.Inscripcions = InscripcioDB.GetByTorneig(torneigId);
-
+                        
                         foreach(Grup grup in torneig.Grups)
                         {
                             for (int i = torneig.Inscripcions.Count - 1; i >= 0; i--)
@@ -51,6 +51,15 @@ namespace GestioTornejos.DB
                                     grup.Inscripcions.Add(torneig.Inscripcions[i]);
                                     torneig.Inscripcions.RemoveAt(i);
                                 }
+                            }
+
+                            grup.Torneig = torneig;
+
+                            grup.Partides = PartidaDB.GetByGrup(grup);
+
+                            foreach(Partida partida in grup.Partides)
+                            {
+                                torneig.Partides.Add(partida);
                             }
                         }
 

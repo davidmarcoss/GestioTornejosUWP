@@ -101,11 +101,16 @@
     <Compile Include="DB\InscripcioDB.cs" />
     <Compile Include="DB\ModalitatDB.cs" />
     <Compile Include="DB\MySQL.cs" />
+    <Compile Include="DB\PartidaDB.cs" />
     <Compile Include="DB\SociDB.cs" />
     <Compile Include="DB\TorneigDB.cs" />
     <Compile Include="Models\DialogBox.cs" />
     <Compile Include="Models\Inscripcio.cs" />
+    <Compile Include="Models\Partida.cs" />
     <Compile Include="Models\Soci.cs" />
+    <Compile Include="UI\ClassificacioPage.xaml.cs">
+      <DependentUpon>ClassificacioPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GrupItemRow.xaml.cs">
       <DependentUpon>GrupItemRow.xaml</DependentUpon>
     </Compile>
@@ -123,6 +128,9 @@
     <Compile Include="UI\GrupsPage.xaml.cs">
       <DependentUpon>GrupsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\PartidaItemRow.xaml.cs">
+      <DependentUpon>PartidaItemRow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\TorneigItemRow.xaml.cs">
       <DependentUpon>TorneigItemRow.xaml</DependentUpon>
     </Compile>
@@ -134,6 +142,10 @@
     <None Include="GestioTornejos_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\add.svg" />
+    <Content Include="Assets\cancel.svg" />
+    <Content Include="Assets\delete.svg" />
+    <Content Include="Assets\save.svg" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -149,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UI\ClassificacioPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\GrupItemRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -162,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\GrupsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PartidaItemRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

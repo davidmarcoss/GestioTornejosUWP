@@ -51,5 +51,17 @@ namespace GestioTornejos.Models
         {
             return Soci.Nom + " " + Soci.Cognom1 + " " + Soci.Cognom2;
         }
+
+        public override bool Equals(object obj)
+        {
+            var inscripcio = obj as Inscripcio;
+            return inscripcio != null &&
+                   Id == inscripcio.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return 2108858624 + Id.GetHashCode();
+        }
     }
 }

@@ -58,15 +58,6 @@ namespace GestioTornejos
             navigateToFrame();
         }
 
-        private void TorneigItemRow_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            mainPageShared.IdxSelected = lvTornejos.SelectedIndex;
-
-            TorneigItemRow torneigItemRow = (TorneigItemRow)sender;
-
-            navigateToFrame();
-        }
-
         private void navigateToFrame()
         {
             if (mainPageShared != null)
@@ -78,6 +69,10 @@ namespace GestioTornejos
                 else if (actionPivots.SelectedIndex == 1)
                 {
                     frameGrups.Navigate(typeof(GrupsPage), mainPageShared);
+                }
+                else if (actionPivots.SelectedIndex == 2)
+                {
+                    frameClassificacio.Navigate(typeof(ClassificacioPage), mainPageShared);
                 }
             }
         }
@@ -119,6 +114,16 @@ namespace GestioTornejos
         private void cbFiltreDates_Unchecked(object sender, RoutedEventArgs e)
         {
             dpDataFrom.IsEnabled = dpDataTo.IsEnabled = false;
+        }
+
+        private void lvTornejos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvTornejos.SelectedIndex >= 0)
+            {
+                mainPageShared.IdxSelected = lvTornejos.SelectedIndex;
+
+                navigateToFrame();
+            }
         }
     }
 }

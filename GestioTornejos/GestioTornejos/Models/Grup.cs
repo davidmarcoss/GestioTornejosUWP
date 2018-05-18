@@ -42,6 +42,14 @@ namespace GestioTornejos.Models
             set { limitEntrades = value; }
         }
 
+        private Torneig torneig;
+
+        public Torneig Torneig
+        {
+            get { return torneig; }
+            set { torneig = value; }
+        }
+
         private ObservableCollection<Inscripcio> inscripcions;
 
         public ObservableCollection<Inscripcio> Inscripcions
@@ -49,6 +57,15 @@ namespace GestioTornejos.Models
             get { return inscripcions; }
             set { inscripcions = value; }
         }
+
+        private ObservableCollection<Partida> partides;
+
+        public ObservableCollection<Partida> Partides
+        {
+            get { return partides; }
+            set { partides = value; }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -58,7 +75,8 @@ namespace GestioTornejos.Models
             Descripcio = descripcio;
             CarambolesVictoria = carambolesVictoria;
             LimitEntrades = limitEntrades;
-            inscripcions = new ObservableCollection<Inscripcio>();
+            Inscripcions = new ObservableCollection<Inscripcio>();
+            Partides = new ObservableCollection<Partida>();
         }
 
         public override bool Equals(object obj)
