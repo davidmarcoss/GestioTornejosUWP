@@ -36,18 +36,12 @@ namespace GestioTornejos.UI
 
             Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);
 
-            if (!Torneig.PreinscripcioOberta)
-            {
-                FormEnabled(false);
-            }
-            else
-            {
-                FormEnabled(true);
-            }
 
             cbModalitats.ItemsSource = ModalitatDB.Get();
 
             populateForm();
+
+            FormEnabled(Torneig.PreinscripcioOberta);
         }
 
         private void FormEnabled(bool status)
@@ -67,6 +61,7 @@ namespace GestioTornejos.UI
         {
             isNou = true;
             resetForm();
+            FormEnabled(true);
             tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = true;
         }
 
@@ -209,9 +204,11 @@ namespace GestioTornejos.UI
 
         private void btnTancarPreinscripcions_Click(object sender, RoutedEventArgs e)
         {
-            Torneig.PreinscripcioOberta = false;
-            TorneigDB.TancarPreinscripcions(Torneig);
-            FormEnabled(false);
+            if (TorneigDB.TancarPreinscripcions(Torneig))
+            {
+                Torneig.PreinscripcioOberta = false;
+                FormEnabled(false);
+            }
         }
     }
 }

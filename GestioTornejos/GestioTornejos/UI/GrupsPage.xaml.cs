@@ -19,8 +19,8 @@ namespace GestioTornejos.UI
         private Torneig Torneig;
         private Grup grup;
         private bool isNou;
-        private ObservableCollection<Inscripcio> inscripcionsCopia;
-        private ObservableCollection<Inscripcio> inscripcionsGrupCopia;
+        private ObservableCollection<Inscripcio> inscripcionsCopia = new ObservableCollection<Inscripcio>();
+        private ObservableCollection<Inscripcio> inscripcionsGrupCopia = new ObservableCollection<Inscripcio>();
 
         public GrupsPage()
         {
@@ -41,8 +41,6 @@ namespace GestioTornejos.UI
             inscripcionsCopia = new ObservableCollection<Inscripcio>(Torneig.Inscripcions);
             lvInscrits.ItemsSource = inscripcionsCopia;
 
-            isNou = true;
-
             if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
             {
                 FormEnabled(false);
@@ -50,16 +48,18 @@ namespace GestioTornejos.UI
                 lvInscritsGrup.IsEnabled = false;
                 lvGrups.IsEnabled = false;
             }
+
+            isNou = true;
         }
 
         private void FormEnabled(bool status)
         {
-            tbDescripcio.IsEnabled 
-                = tbCarambolesVictoria.IsEnabled 
-                = tbLimitEntrades.IsEnabled 
-                = btnGuardar.IsEnabled 
-                = btnCancelar.IsEnabled 
-                = btnCrear.IsEnabled 
+            tbDescripcio.IsEnabled
+                = tbCarambolesVictoria.IsEnabled
+                = tbLimitEntrades.IsEnabled
+                = btnGuardar.IsEnabled
+                = btnCancelar.IsEnabled
+                = btnCrear.IsEnabled
                 = btnEliminar.IsEnabled
                 = status;
         }
@@ -69,11 +69,17 @@ namespace GestioTornejos.UI
         {
             if (inscripcionsGrupCopia != null && inscripcionsGrupCopia.Count >= 0)
             {
-                foreach(Inscripcio inscripcio in inscripcionsGrupCopia)
+                foreach (Inscripcio inscripcio in inscripcionsGrupCopia)
                 {
-                    inscripcionsCopia.Add(inscripcio);
+                    if (!grup.Inscripcions.Contains(inscripcio))
+                    {
+                        inscripcionsCopia.Add(inscripcio);
+                    }
                 }
+
             }
+
+            inscripcionsGrupCopia.Clear();
 
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             populateForm();
@@ -207,7 +213,7 @@ namespace GestioTornejos.UI
             {
                 if (GrupDB.Delete(grup))
                 {
-                    foreach(Inscripcio inscripcio in grup.Inscripcions)
+                    foreach (Inscripcio inscripcio in grup.Inscripcions)
                     {
                         inscripcionsCopia.Add(inscripcio);
                     }
@@ -290,13 +296,13 @@ namespace GestioTornejos.UI
 
         private void btnEmparellaments_Click(object sender, RoutedEventArgs e)
         {
-            /*if (inscripcionsCopia.Count >= 0)
+            if (inscripcionsCopia.Count >= 0)
             {
-                DialogBox.Show("Error al generar emparellaments","Per a generar els emparellaments tens que tindre tots els inscrits a dins d'un grup");
+                DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que tindre tots els inscrits a dins d'un grup");
             }
-            else*/
+            else
             {
-                foreach(Grup grup in Torneig.Grups)
+                foreach (Grup grup in Torneig.Grups)
                 {
                     int cont = 0;
                     foreach (Inscripcio inscripcio in grup.Inscripcions)

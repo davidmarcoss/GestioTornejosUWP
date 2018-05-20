@@ -29,8 +29,8 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -81,15 +81,15 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
+            <Button x:Name="btnEmparellaments" Click="btnEmparellaments_Click">Tancar grups i fer emparellaments</Button>
+        </Grid>
+        <Grid Grid.Row="2">
             <ScrollViewer Padding="10">
                 <ListView x:Name="lvGrups" 
                           ItemTemplate="{StaticResource DataTemplateItem}" 
                           HeaderTemplate="{StaticResource DataTemplateHeader}"
                           SelectionChanged="lvGrups_SelectionChanged"></ListView>
             </ScrollViewer>
-        </Grid>
-        <Grid Grid.Row="2">
-            <Button x:Name="btnEmparellaments" Click="btnEmparellaments_Click">Tancar grups i fer emparellaments</Button>
         </Grid>
     </Grid>
 </Page>

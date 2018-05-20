@@ -181,7 +181,8 @@ namespace GestioTornejos.DB
                     consulta.Transaction = trans;
 
                     consulta.CommandText = @"update tornejos set preinscripcio_oberta = @p_preinscripcioOberta  
-                                                where id = @p_id";
+                                                where id = @p_id
+                                                and actiu = 1";
         
 
                     AddParameter(consulta, "p_id", torneig.Id, MySqlDbType.Int32);
