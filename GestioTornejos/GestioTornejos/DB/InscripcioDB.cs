@@ -20,9 +20,14 @@ namespace GestioTornejos.DB
                 connexio.Open();
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.CommandText = @"select s.id as 'soci_id', s.nom, s.cognom1, s.cognom2, i.* from inscripcions i
+                    consulta.CommandText = @"select 
+                                                i.*,
+                                                s.id as 'soci_id', s.nom, s.cognom1, s.cognom2,
+                                                g.id as 'grup_id', g.descripcio, g.caramboles_victoria, g.limit_entrades
+                                            from inscripcions i
                                             left join socis s on i.soci_id = s.id
-                                            where torneig_id = @p_torneigId";
+                                            left join grups g on i.grup_id = g.id and g.actiu = 1
+                                            where i.torneig_id = @p_torneigId";
 
                     AddParameter(consulta, "p_torneigId", torneigId, MySqlDbType.Int32);
 
@@ -36,7 +41,7 @@ namespace GestioTornejos.DB
                         Inscripcio inscripcio = new Inscripcio((int)reader["id"], (DateTime)reader["data_creacio"], soci);
                         try
                         {
-                            inscripcio.Grup = GrupDB.GetById((int)reader["grup_id"]);
+                            inscripcio.Grup = new Grup((int)reader["grup_id"], (string)reader["descripcio"], (int)reader["caramboles_victoria"], (int)reader["limit_entrades"]);
                         } 
                         catch(NullReferenceException ex)
                         {

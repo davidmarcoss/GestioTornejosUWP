@@ -39,14 +39,12 @@ namespace GestioTornejos.UI
             lvGrups.ItemsSource = Torneig.Grups;
 
             inscripcionsCopia = new ObservableCollection<Inscripcio>(Torneig.Inscripcions);
+            inscripcionsCopia.OrderBy(ins => ins.Soci.Estadistiques.Single(estadistica => estadistica.Modalitat.Equals(Torneig.Modalitat)).CoeficientBase);
             lvInscrits.ItemsSource = inscripcionsCopia;
 
             if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
             {
                 FormEnabled(false);
-                lvInscrits.IsEnabled = false;
-                lvInscritsGrup.IsEnabled = false;
-                //lvGrups.IsEnabled = false;
             }
 
             isNou = true;
@@ -61,6 +59,9 @@ namespace GestioTornejos.UI
                 = btnCancelar.IsEnabled
                 = btnCrear.IsEnabled
                 = btnEliminar.IsEnabled
+                = btnEmparellaments.IsEnabled
+                = lvInscrits.IsEnabled
+                = lvInscritsGrup.IsEnabled
                 = status;
         }
 
@@ -85,6 +86,11 @@ namespace GestioTornejos.UI
             populateForm();
             FormEnabled(true);
             isNou = false;
+
+            if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
+            {
+                FormEnabled(false);
+            }
         }
 
         private void resetForm()
@@ -99,7 +105,7 @@ namespace GestioTornejos.UI
         {
             if (tbDescripcio.Text.Equals(""))
             {
-                tbDescripcio.Background = new SolidColorBrush(Colors.Red);
+                tbDescripcio.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -109,7 +115,7 @@ namespace GestioTornejos.UI
 
             if (tbCarambolesVictoria.Text.Equals(""))
             {
-                tbCarambolesVictoria.Background = new SolidColorBrush(Colors.Red);
+                tbCarambolesVictoria.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -119,7 +125,7 @@ namespace GestioTornejos.UI
 
             if (tbLimitEntrades.Text.Equals(""))
             {
-                tbLimitEntrades.Background = new SolidColorBrush(Colors.Red);
+                tbLimitEntrades.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -296,7 +302,7 @@ namespace GestioTornejos.UI
 
         private void btnEmparellaments_Click(object sender, RoutedEventArgs e)
         {
-            if (inscripcionsCopia.Count >= 0)
+            if (inscripcionsCopia.Count > 0)
             {
                 DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que tindre tots els inscrits a dins d'un grup");
             }
@@ -316,7 +322,7 @@ namespace GestioTornejos.UI
                         {
                             Inscripcio inscripcio2 = grup.Inscripcions[i];
 
-                            Partida partida = new Partida(-1, inscripcio.Soci, inscripcio2.Soci, grup, Torneig, 0, 0, 0, EstatPartida.PENDENT);
+                            Partida partida = new Partida(-1, inscripcio.Soci, inscripcio2.Soci, grup, Torneig, 0, 0, 0, 0, EstatPartida.PENDENT);
 
                             Torneig.Partides.Add(partida);
                         }

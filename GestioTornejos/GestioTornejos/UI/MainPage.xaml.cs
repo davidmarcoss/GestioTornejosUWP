@@ -1,8 +1,10 @@
 ﻿using GestioTornejos.DB;
 using GestioTornejos.Models;
 using GestioTornejos.UI;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 namespace GestioTornejos
@@ -20,21 +22,29 @@ namespace GestioTornejos
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            ocTornejos = TorneigDB.Get(-1, "", "");
-
-            lvTornejos.ItemsSource = ocTornejos;
-
-            mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), lvTornejos);
-            mainPageShared.OcTornejos = ocTornejos;
-            mainPageShared.LvTornejos = lvTornejos;
-            if (mainPageShared.LvTornejos.Items.Count > 0)
-            { 
-                mainPageShared.LvTornejos.SelectedIndex = 0;
+            if (!MySQL.CheckConnexio())
+            {
+                ErrorAndAbort("Error en la connexió", "No s'ha pogut establir connexió amb la base de dades, accepta per abortar la aplicació.");
             }
+            else
+            {
 
-            frameDades.Navigate(typeof(DadesPage), mainPageShared);
+                ocTornejos = TorneigDB.Get(-1, "", "");
 
-            dpDataFrom.IsEnabled = dpDataTo.IsEnabled = false;
+                lvTornejos.ItemsSource = ocTornejos;
+
+                mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), lvTornejos);
+                mainPageShared.OcTornejos = ocTornejos;
+                mainPageShared.LvTornejos = lvTornejos;
+                if (mainPageShared.LvTornejos.Items.Count > 0)
+                {
+                    mainPageShared.LvTornejos.SelectedIndex = 0;
+                }
+
+                frameDades.Navigate(typeof(DadesPage), mainPageShared);
+
+                dpDataFrom.IsEnabled = dpDataTo.IsEnabled = false;
+            }
         }
 
         private void actionPivots_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -115,6 +125,36 @@ namespace GestioTornejos
                 mainPageShared.IdxSelected = lvTornejos.SelectedIndex;
 
                 navigateToFrame();
+            }
+        }
+
+        private async void ErrorAndAbort(String title, String msg)
+        {
+            await DialogBox.ShowConfirm(title, msg, true);
+            CoreApplication.Exit();
+        }
+
+        private void btnReload_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbFiltreDates.IsChecked == true || cbEstats.SelectedIndex > 0)
+            {
+                int estat = cbEstats.SelectedIndex - 1;
+                String dataFrom = "";
+                String dataTo = "";
+
+                if (cbFiltreDates.IsChecked == true)
+                {
+                    dataFrom = dpDataFrom.Date.DateTime.ToString("yyyy-MM-dd");
+                    dataTo = dpDataTo.Date.DateTime.ToString("yyyy-MM-dd");
+                }
+
+                ocTornejos = TorneigDB.Get(estat, dataFrom, dataTo);
+                lvTornejos.ItemsSource = ocTornejos;
+            }
+            else
+            {
+                ocTornejos = TorneigDB.Get(-1, "", "");
+                lvTornejos.ItemsSource = ocTornejos;
             }
         }
     }

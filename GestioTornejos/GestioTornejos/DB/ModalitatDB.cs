@@ -86,7 +86,7 @@ namespace GestioTornejos.DB
                         Dictionary<string, object> fila = getFila(reader);
 
                         Modalitat modalitat = GetById((int)fila["modalitat_id"]);
-                        EstadisticaModalitat estadistica = new EstadisticaModalitat(soci, modalitat, (float)fila["coeficient_base"], (int)fila["caramboles_temporada_actual"], (int)fila["entrades_temporada_actual"]);
+                        EstadisticaModalitat estadistica = new EstadisticaModalitat(soci, modalitat, reader.GetDouble("coeficient_base"), (int)fila["caramboles_temporada_actual"], (int)fila["entrades_temporada_actual"]);
 
                         estadistiques.Add(estadistica);
                     }
@@ -97,5 +97,7 @@ namespace GestioTornejos.DB
 
             return estadistiques;
         }
+
+
     }
 }

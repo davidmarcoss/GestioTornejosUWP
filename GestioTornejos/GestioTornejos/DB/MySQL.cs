@@ -19,5 +19,22 @@ namespace GestioTornejos.DB
             //string conString = "server = 92.222.27.83; uid = m2-dmarcos; pwd = 23844512K;charset=utf8; SslMode=None ; database = m2_dmarcos";
             return new MySqlConnection(conString);
         }
+
+        public static bool CheckConnexio()
+        {
+            try
+            {
+                using (MySqlConnection connexio = GetConnexio())
+                {
+                    connexio.Open();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -136,9 +136,6 @@
     <Compile Include="UI\PartidaItemRow.xaml.cs">
       <DependentUpon>PartidaItemRow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\RankingPage.xaml.cs">
-      <DependentUpon>RankingPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\ReportsPage.xaml.cs">
       <DependentUpon>ReportsPage.xaml</DependentUpon>
     </Compile>
@@ -159,6 +156,7 @@
     <Content Include="Assets\add.svg" />
     <Content Include="Assets\cancel.svg" />
     <Content Include="Assets\delete.svg" />
+    <Content Include="Assets\reload.svg" />
     <Content Include="Assets\save.svg" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="Properties\Default.rd.xml" />
@@ -200,10 +198,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\PartidaItemRow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\RankingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

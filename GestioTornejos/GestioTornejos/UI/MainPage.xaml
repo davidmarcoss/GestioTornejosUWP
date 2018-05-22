@@ -71,8 +71,17 @@
                     <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="9*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Tornejos" Margin="10"
-                           FontWeight="Bold" Grid.Row="0"></TextBlock>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"></ColumnDefinition>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Tornejos" Margin="10"
+                           FontWeight="Bold" Grid.Column="0"
+                               VerticalAlignment="Center"></TextBlock>
+                    <Button Grid.Column="1" x:Name="btnReload" Click="btnReload_Click">Refrescar</Button>
+                </Grid>
+
                 <ScrollViewer Grid.Row="1">
                     <ListView ItemContainerStyle="{StaticResource ListViewItemContainerStyle1}" x:Name="lvTornejos" Padding="0" Margin="0" 
                               ItemTemplate="{StaticResource DataTemplateTorneigRow}"

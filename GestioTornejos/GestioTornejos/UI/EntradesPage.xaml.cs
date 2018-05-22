@@ -49,10 +49,13 @@ namespace GestioTornejos.UI
         {
             tbCarambolesA.IsEnabled
                 = tbCarambolesB.IsEnabled
-                = tbNumEntrades.IsEnabled
+                = tbNumEntradesA.IsEnabled
+                = tbNumEntradesB.IsEnabled
                 = cbEstatPartida.IsEnabled
                 = cbGuanyador.IsEnabled
                 = cbModeVictoria.IsEnabled
+                = btnGuardar.IsEnabled
+                = btnCancelar.IsEnabled
                 = status; 
         }
 
@@ -61,8 +64,9 @@ namespace GestioTornejos.UI
             if (checkForm())
             {
                 partida.CarambolesA = Int32.Parse(tbCarambolesA.Text);
-                partida.CarambolesB = Int32.Parse(tbCarambolesA.Text);
-                partida.NumEntrades = Int32.Parse(tbNumEntrades.Text);
+                partida.CarambolesB = Int32.Parse(tbCarambolesB.Text);
+                partida.NumEntradesA = Int32.Parse(tbNumEntradesA.Text);
+                partida.NumEntradesB = Int32.Parse(tbNumEntradesB.Text);
                 partida.EstatPartida = (EstatPartida) cbEstatPartida.SelectedIndex;
                 partida.Guanyador = (Guanyador) cbGuanyador.SelectedIndex;
                 partida.ModeVictoria = (ModeVictoria) cbModeVictoria.SelectedIndex;
@@ -70,7 +74,65 @@ namespace GestioTornejos.UI
                 if (PartidaDB.Update(partida))
                 {
                     populateForm();
+                    lvPartides.ItemsSource = grup.Partides;
+
+                    if (partida.EstatPartida == EstatPartida.JUGAT)
+                    {
+                        Modalitat modalitat = Torneig.Modalitat;
+                        EstadisticaModalitat estadisticaModalitat = null;
+
+                        estadisticaModalitat = partida.SociA.Estadistiques.SingleOrDefault(em => em.Modalitat.Equals(modalitat));
+                        if (estadisticaModalitat == null)
+                        {
+                            estadisticaModalitat = new EstadisticaModalitat();
+                            estadisticaModalitat.Soci = partida.SociA;
+                            estadisticaModalitat.Modalitat = Torneig.Modalitat;
+                            estadisticaModalitat.CarambolesTemporadaActual += partida.CarambolesA;
+                            estadisticaModalitat.EntradesTemporadaActual += partida.NumEntradesA;
+                            double coeficient = (double)estadisticaModalitat.CarambolesTemporadaActual / (double)estadisticaModalitat.EntradesTemporadaActual;
+                            estadisticaModalitat.CoeficientBase = coeficient;
+                            if (SociDB.InsertEstadistiques(partida.SociA, estadisticaModalitat))
+                            {
+                                partida.SociA.Estadistiques.Add(estadisticaModalitat);
+                            }
+                        }
+                        else
+                        {
+                            estadisticaModalitat.CarambolesTemporadaActual += partida.CarambolesA;
+                            estadisticaModalitat.EntradesTemporadaActual += partida.NumEntradesA;
+                            double coeficient = (double)estadisticaModalitat.CarambolesTemporadaActual / (double)estadisticaModalitat.EntradesTemporadaActual;
+                            estadisticaModalitat.CoeficientBase = coeficient;
+                            SociDB.UpdateEstadistiques(partida.SociA, estadisticaModalitat);
+                        }
+
+                        estadisticaModalitat = null;
+
+                        estadisticaModalitat = partida.SociB.Estadistiques.SingleOrDefault(em => em.Modalitat.Equals(modalitat));
+                        if (estadisticaModalitat == null)
+                        {
+                            estadisticaModalitat = new EstadisticaModalitat();
+                            estadisticaModalitat.Soci = partida.SociB;
+                            estadisticaModalitat.Modalitat = Torneig.Modalitat;
+                            estadisticaModalitat.CarambolesTemporadaActual += partida.CarambolesB;
+                            estadisticaModalitat.EntradesTemporadaActual += partida.NumEntradesB;
+                            double coeficient = (double)estadisticaModalitat.CarambolesTemporadaActual / (double)estadisticaModalitat.EntradesTemporadaActual;
+                            estadisticaModalitat.CoeficientBase = coeficient;
+                            if (SociDB.UpdateEstadistiques(partida.SociB, estadisticaModalitat))
+                            {
+                                partida.SociB.Estadistiques.Add(estadisticaModalitat);
+                            }
+                        }
+                        else
+                        {
+                            estadisticaModalitat.CarambolesTemporadaActual += partida.CarambolesB;
+                            estadisticaModalitat.EntradesTemporadaActual += partida.NumEntradesB;
+                            double coeficient = (double)estadisticaModalitat.CarambolesTemporadaActual / (double)estadisticaModalitat.EntradesTemporadaActual;
+                            estadisticaModalitat.CoeficientBase = coeficient;
+                            SociDB.UpdateEstadistiques(partida.SociB, estadisticaModalitat);
+                        }
+                    }
                 }
+
             }
         }
 
@@ -83,7 +145,8 @@ namespace GestioTornejos.UI
         {
             tbCarambolesA.Text = partida.CarambolesA.ToString();
             tbCarambolesB.Text = partida.CarambolesB.ToString();
-            tbNumEntrades.Text = partida.NumEntrades.ToString();
+            tbNumEntradesA.Text = partida.NumEntradesA.ToString();
+            tbNumEntradesB.Text = partida.NumEntradesB.ToString();
             cbEstatPartida.SelectedIndex = (int)partida.EstatPartida;
             cbModeVictoria.SelectedIndex = (int)partida.ModeVictoria;
             cbGuanyador.Items.Clear();
@@ -124,7 +187,7 @@ namespace GestioTornejos.UI
             }
         }
 
-        private void tbNumEntrades_KeyDown(object sender, KeyRoutedEventArgs e)
+        private void tbNumEntradesA_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (!e.Key.ToString().Contains("Number"))
             {
@@ -134,7 +197,23 @@ namespace GestioTornejos.UI
             {
                 try
                 {
-                    Int32.Parse(tbNumEntrades.Text + e.Key.ToString().Replace("Number", ""));
+                    Int32.Parse(tbNumEntradesA.Text + e.Key.ToString().Replace("Number", ""));
+                }
+                catch (OverflowException) { e.Handled = true; }
+            }
+        }
+
+        private void tbNumEntradesB_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (!e.Key.ToString().Contains("Number"))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                try
+                {
+                    Int32.Parse(tbNumEntradesB.Text + e.Key.ToString().Replace("Number", ""));
                 }
                 catch (OverflowException) { e.Handled = true; }
             }
@@ -142,9 +221,10 @@ namespace GestioTornejos.UI
 
         private bool checkForm()
         {
-            if (tbCarambolesA.Text.Equals("") || Int32.Parse(tbCarambolesA.Text) < 0)
+            int carambolesA = Int32.Parse(tbCarambolesA.Text);
+            if (tbCarambolesA.Text.Equals("") || carambolesA < 0)
             {
-                tbCarambolesA.Background = new SolidColorBrush(Colors.Red);
+                tbCarambolesA.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -152,9 +232,10 @@ namespace GestioTornejos.UI
                 tbCarambolesA.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            if (tbCarambolesB.Text.Equals("") || Int32.Parse(tbCarambolesB.Text) < 0)
+            int carambolesB = Int32.Parse(tbCarambolesB.Text);
+            if (tbCarambolesB.Text.Equals("") || carambolesB < 0)
             {
-                tbCarambolesB.Background = new SolidColorBrush(Colors.Red);
+                tbCarambolesB.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -162,14 +243,60 @@ namespace GestioTornejos.UI
                 tbCarambolesB.Background = new SolidColorBrush(Colors.Transparent);
             }
 
-            if (tbNumEntrades.Text.Equals("") || Int32.Parse(tbNumEntrades.Text) < 0)
+            int numEntradesA = Int32.Parse(tbNumEntradesA.Text);
+            if (tbNumEntradesA.Text.Equals("") || numEntradesA < 0)
             {
-                tbNumEntrades.Background = new SolidColorBrush(Colors.Red);
+                tbNumEntradesA.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
             {
-                tbNumEntrades.Background = new SolidColorBrush(Colors.Transparent);
+                tbNumEntradesA.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            int numEntradesB = Int32.Parse(tbNumEntradesB.Text);
+            if (tbNumEntradesB.Text.Equals("") || numEntradesB < 0)
+            {
+                tbNumEntradesB.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+            else
+            {
+                tbNumEntradesB.Background = new SolidColorBrush(Colors.Transparent);
+            }
+
+            if (carambolesA > grup.CarambolesVictoria)
+            {
+                tbCarambolesA.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+            if (carambolesB > grup.CarambolesVictoria)
+            {
+                tbCarambolesB.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+
+            if (numEntradesA > grup.LimitEntrades)
+            {
+                tbCarambolesA.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+            if (numEntradesB > grup.LimitEntrades)
+            {
+                tbCarambolesB.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+
+            if (carambolesA > numEntradesA)
+            {
+                tbCarambolesA.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
+            }
+
+            if (carambolesB > numEntradesB)
+            {
+                tbCarambolesB.Background = new SolidColorBrush(Colors.LightPink);
+                return false;
             }
 
             return true;
@@ -177,15 +304,28 @@ namespace GestioTornejos.UI
 
         private void lvGrups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            lvPartides.SelectedIndex = -1;
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             lvPartides.ItemsSource = grup.Partides;
+            if (grup.Partides.Count > 0)
+            {
+                lvPartides.SelectedIndex = 0;
+            }
         }
 
         private void lvPartides_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            partida = grup.Partides[lvPartides.SelectedIndex];
-            populateForm();
-            FormEnabled(true);
+            if (lvPartides.SelectedIndex >= 0)
+            {
+                partida = grup.Partides[lvPartides.SelectedIndex];
+                populateForm();
+                FormEnabled(true);
+
+                if (partida.EstatPartida == EstatPartida.JUGAT)
+                {
+                    FormEnabled(false);
+                }
+            }
         }
     }
 }

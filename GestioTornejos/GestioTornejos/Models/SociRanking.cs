@@ -40,9 +40,9 @@ namespace GestioTornejos.Models
             set { partidesPerdudes = value; }
         }
 
-        private float coeficient;
+        private double coeficient;
 
-        public float Coeficient
+        public double Coeficient
         {
             get { return coeficient; }
             set { coeficient = value; }

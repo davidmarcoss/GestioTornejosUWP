@@ -36,7 +36,6 @@ namespace GestioTornejos.UI
 
             Torneig = mainPageShared.OcTornejos.ElementAt(mainPageShared.IdxSelected);
 
-
             cbModalitats.ItemsSource = ModalitatDB.Get();
 
             populateForm();
@@ -62,7 +61,7 @@ namespace GestioTornejos.UI
             isNou = true;
             resetForm();
             FormEnabled(true);
-            tbNom.IsEnabled = dpDataInici.IsEnabled = cbModalitats.IsEnabled = true;
+            btnEliminar.IsEnabled = false;
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -92,6 +91,7 @@ namespace GestioTornejos.UI
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
             populateForm();
+            FormEnabled(Torneig.PreinscripcioOberta);
         }
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
@@ -149,7 +149,7 @@ namespace GestioTornejos.UI
         {
             if (tbNom.Text.Length <= 0 || tbNom.Text.Equals(""))
             {
-                tbNom.Background = new SolidColorBrush(Colors.Red);
+                tbNom.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -159,7 +159,7 @@ namespace GestioTornejos.UI
 
             if (cbModalitats.SelectedIndex < 0)
             {
-                cbModalitats.Background = new SolidColorBrush(Colors.Red);
+                cbModalitats.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -170,7 +170,7 @@ namespace GestioTornejos.UI
             if (dpDataInici.Date.DateTime < DateTime.Now)
             {
                 DialogBox.Show("Error", "La data de inici ha de ser major que avui");
-                dpDataInici.Background = new SolidColorBrush(Colors.Red);
+                dpDataInici.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else
@@ -181,7 +181,7 @@ namespace GestioTornejos.UI
             if (dpDataFi.Date.DateTime < DateTime.Now)
             {
                 DialogBox.Show("Error", "La data de fi ha de ser major que avui");
-                dpDataFi.Background = new SolidColorBrush(Colors.Red);
+                dpDataFi.Background = new SolidColorBrush(Colors.LightPink);
                 return false;
             }
             else

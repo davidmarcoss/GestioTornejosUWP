@@ -24,9 +24,9 @@ namespace GestioTornejos.Models
             set { modalitat = value; }
         }
 
-        private float coeficientBase;
+        private double coeficientBase;
 
-        public float CoeficientBase
+        public double CoeficientBase
         {
             get { return coeficientBase; }
             set { coeficientBase = value; }
@@ -48,13 +48,18 @@ namespace GestioTornejos.Models
             set { entradesTemporadaActual = value; }
         }
 
-        public EstadisticaModalitat(Soci soci, Modalitat modalitat, float coeficientBase, int carambolesTemporadaActual, int entradesTemporadaActual)
+        public EstadisticaModalitat(Soci soci, Modalitat modalitat, double coeficientBase, int carambolesTemporadaActual, int entradesTemporadaActual)
         {
             Soci = soci;
             Modalitat = modalitat;
             CoeficientBase = coeficientBase;
             CarambolesTemporadaActual = carambolesTemporadaActual;
             EntradesTemporadaActual = entradesTemporadaActual;
+        }
+
+        public EstadisticaModalitat()
+        {
+
         }
     }
 }

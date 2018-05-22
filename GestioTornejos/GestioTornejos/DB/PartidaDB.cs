@@ -114,11 +114,11 @@ namespace GestioTornejos.DB
                                 guanyador = Guanyador.B;
                             }
 
-                            partida = new Partida((int)fila["id"], inscripcioA.Soci, inscripcioB.Soci, grup, grup.Torneig, (int)fila["carambolesA"], (int)fila["carambolesB"], dt, (int)fila["num_entrades"], estatPartida, modeVictoria, guanyador);
+                            partida = new Partida((int)fila["id"], inscripcioA.Soci, inscripcioB.Soci, grup, grup.Torneig, (int)fila["carambolesA"], (int)fila["carambolesB"], dt, (int)fila["num_entradesA"], (int)fila["num_entradesB"], estatPartida, modeVictoria, guanyador);
                         }
                         else
                         {
-                            partida = new Partida((int)fila["id"], inscripcioA.Soci, inscripcioB.Soci, grup, grup.Torneig, (int)fila["carambolesA"], (int)fila["carambolesB"], (int)fila["num_entrades"], estatPartida);
+                            partida = new Partida((int)fila["id"], inscripcioA.Soci, inscripcioB.Soci, grup, grup.Torneig, (int)fila["carambolesA"], (int)fila["carambolesB"], (int)fila["num_entradesA"], (int)fila["num_entradesB"], estatPartida);
                         }
 
 
@@ -150,7 +150,8 @@ namespace GestioTornejos.DB
                                                 carambolesA=@p_carambolesA,
                                                 carambolesB=@p_carambolesB,
                                                 data_realitzacio=@p_data_realitzacio,
-                                                num_entrades=@p_num_entrades,
+                                                num_entradesA=@p_num_entradesA,
+                                                num_entradesB=@p_num_entradesB,
                                                 estat_partida=@p_estat_partida,
                                                 mode_victoria=@p_mode_victoria,
                                                 guanyador=@p_guanyador
@@ -162,7 +163,8 @@ namespace GestioTornejos.DB
                     AddParameter(consulta, "p_carambolesA", partida.CarambolesA, MySqlDbType.Int32);
                     AddParameter(consulta, "p_carambolesB", partida.CarambolesB, MySqlDbType.Int32);
                     AddParameter(consulta, "p_data_realitzacio", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), MySqlDbType.String);
-                    AddParameter(consulta, "p_num_entrades", partida.NumEntrades, MySqlDbType.Int32);
+                    AddParameter(consulta, "p_num_entradesA", partida.NumEntradesA, MySqlDbType.Int32);
+                    AddParameter(consulta, "p_num_entradesB", partida.NumEntradesB, MySqlDbType.Int32);
                     AddParameter(consulta, "p_estat_partida", partida.EstatPartida, MySqlDbType.Int32);
                     AddParameter(consulta, "p_mode_victoria", partida.ModeVictoria, MySqlDbType.Int32);
                     AddParameter(consulta, "p_guanyador", partida.Guanyador, MySqlDbType.Int32);

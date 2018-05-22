@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 
 namespace GestioTornejos.Models
 {
@@ -13,6 +14,40 @@ namespace GestioTornejos.Models
         {
             var dialog = new MessageDialog(message, title);
             await dialog.ShowAsync();
+        }
+
+        public static async Task<bool> ShowConfirm(String tit, String msg, bool bOnlyCancel)
+        {
+            bool res = false;
+
+            if (tit == null || msg == null) return res;
+
+            ContentDialog locationPromptDialog;
+            if (bOnlyCancel)
+            {
+                locationPromptDialog = new ContentDialog
+                {
+                    Title = tit,
+                    Content = msg,
+                    CloseButtonText = "Tancar"
+                };
+            }
+            else
+            {
+                locationPromptDialog = new ContentDialog
+                {
+                    Title = tit,
+                    Content = msg,
+                    CloseButtonText = "Cancelar",
+                    PrimaryButtonText = "Acceptar"
+                };
+            }
+
+            ContentDialogResult result = await locationPromptDialog.ShowAsync();
+
+            res = (result == ContentDialogResult.Primary) ? true : false;
+
+            return res;
         }
     }
 }

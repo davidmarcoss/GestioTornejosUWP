@@ -44,7 +44,7 @@ namespace GestioTornejos.UI
 
         private void lvGrups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            socisRanking.Clear();
+            socis.Clear();
 
             grup = Torneig.Grups[lvGrups.SelectedIndex];
             foreach(Inscripcio inscripcio in grup.Inscripcions)
@@ -62,7 +62,7 @@ namespace GestioTornejos.UI
                 int partidesJugades = GetCountPartidesJugades(soci);
                 int partidesGuanyades = GetCountPartidesGuanyades(soci);
                 int partidesPerdudes = GetCountPartidesPerdudes(soci);
-                float coeficient = GetCoeficient(soci);
+                double coeficient = GetCoeficient(soci);
 
                 sociRanking.Nom = nom;
                 sociRanking.PartidesJugades = partidesJugades;
@@ -114,24 +114,23 @@ namespace GestioTornejos.UI
         {
             int count = 0;
 
-            foreach (Partida partida in grup.Partides)
+            foreach (Partida partida in grup.Partides.Where(p => p.SociA.Equals(soci) || p.SociB.Equals(soci)))
             {
-                if (partida.EstatPartida == EstatPartida.JUGAT)
+
+                if ((partida.EstatPartida == EstatPartida.JUGAT && (partida.Guanyador == Guanyador.A && !partida.SociA.Equals(soci))
+                    || (partida.Guanyador == Guanyador.B && !partida.SociB.Equals(soci))))
                 {
-                    if ((partida.Guanyador == Guanyador.A && !partida.SociA.Equals(soci))
-                        || (partida.Guanyador == Guanyador.B && !partida.SociB.Equals(soci)))
-                    {
-                        count++;
-                    }
+                    count++;
                 }
+                
             }
 
             return count;
         }
 
-        private float GetCoeficient(Soci soci)
+        private double GetCoeficient(Soci soci)
         {
-            float coeficient = 0;
+            double coeficient = 0;
 
             foreach(EstadisticaModalitat estadistica in soci.Estadistiques)
             {

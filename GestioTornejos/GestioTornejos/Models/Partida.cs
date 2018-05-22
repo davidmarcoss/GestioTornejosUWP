@@ -73,12 +73,20 @@ namespace GestioTornejos.Models
             set { dataRealitzacio = value;}
         }
 
-        private int numEntrades;
+        private int numEntradesA;
 
-        public int NumEntrades
+        public int NumEntradesA
         {
-            get { return numEntrades; }
-            set { numEntrades = value; }
+            get { return numEntradesA; }
+            set { numEntradesA = value; }
+        }
+
+        private int numEntradesB;
+
+        public int NumEntradesB
+        {
+            get { return numEntradesB; }
+            set { numEntradesB = value; }
         }
 
         private EstatPartida estatPartida;
@@ -105,7 +113,7 @@ namespace GestioTornejos.Models
             set { guanyador = value; }
         }
 
-        public Partida(int id, Soci sociA, Soci sociB, Grup grup, Torneig torneig, int carambolesA, int carambolesB, int numEntrades, EstatPartida estatPartida)
+        public Partida(int id, Soci sociA, Soci sociB, Grup grup, Torneig torneig, int carambolesA, int carambolesB, int numEntradesA, int numEntradesB, EstatPartida estatPartida)
         {
             Id = id;
             SociA = sociA;
@@ -114,12 +122,13 @@ namespace GestioTornejos.Models
             Torneig = torneig;
             CarambolesA = carambolesA;
             CarambolesB = carambolesB;
-            NumEntrades = numEntrades;
+            NumEntradesA = numEntradesA;
+            NumEntradesB = numEntradesB;
             EstatPartida = estatPartida;
             DataRealitzacio = null;
         }
 
-        public Partida(int id, Soci sociA, Soci sociB, Grup grup, Torneig torneig, int carambolesA, int carambolesB, DateTime? dataRealitzacio, int numEntrades, EstatPartida estatPartida, ModeVictoria modeVictoria, Guanyador guanyador)
+        public Partida(int id, Soci sociA, Soci sociB, Grup grup, Torneig torneig, int carambolesA, int carambolesB, DateTime? dataRealitzacio, int numEntradesA, int numEntradesB, EstatPartida estatPartida, ModeVictoria modeVictoria, Guanyador guanyador)
         {
             Id = id;
             SociA = sociA;
@@ -129,7 +138,8 @@ namespace GestioTornejos.Models
             CarambolesA = carambolesA;
             CarambolesB = carambolesB;
             DataRealitzacio = dataRealitzacio;
-            NumEntrades = numEntrades;
+            NumEntradesA = numEntradesA;
+            NumEntradesB = numEntradesB;
             EstatPartida = estatPartida;
             ModeVictoria = ModeVictoria;
         }
