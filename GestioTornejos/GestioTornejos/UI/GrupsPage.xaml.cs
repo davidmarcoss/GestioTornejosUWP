@@ -46,7 +46,7 @@ namespace GestioTornejos.UI
                 FormEnabled(false);
                 lvInscrits.IsEnabled = false;
                 lvInscritsGrup.IsEnabled = false;
-                lvGrups.IsEnabled = false;
+                //lvGrups.IsEnabled = false;
             }
 
             isNou = true;

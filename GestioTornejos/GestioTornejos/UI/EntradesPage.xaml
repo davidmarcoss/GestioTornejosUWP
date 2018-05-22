@@ -1,0 +1,123 @@
+﻿<Page
+    x:Class="GestioTornejos.UI.EntradesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GestioTornejos.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <Page.Resources>
+        <DataTemplate x:Key="DataTemplateItem">
+            <local:GrupItemRow Grup="{Binding this}"></local:GrupItemRow>
+        </DataTemplate>
+        <DataTemplate x:Key="DataTemplateHeader">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Descripcio" Grid.Column="0" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+                <TextBlock Text="Caramboles Victoria" Grid.Column="1" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+                <TextBlock Text="Limit Entrades" Grid.Column="2" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="DataTemplateItemPartida">
+            <local:PartidaItemRow Partida="{Binding this}"></local:PartidaItemRow>
+        </DataTemplate>
+        <DataTemplate x:Key="DataTemplateHeaderPartida">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Soci A" Grid.Column="0" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+                <TextBlock Text="Caramboles A" Grid.Column="1" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+                <TextBlock Text="Soci B" Grid.Column="2" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+                <TextBlock Text="Caramboles B" Grid.Column="3" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <ScrollViewer Padding="10">
+                    <ListView x:Name="lvGrups" 
+                              ItemTemplate="{StaticResource DataTemplateItem}" 
+                              HeaderTemplate="{StaticResource DataTemplateHeader}"
+                              SelectionChanged="lvGrups_SelectionChanged"></ListView>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ScrollViewer Padding="10">
+                    <ListView x:Name="lvPartides" 
+                              ItemTemplate="{StaticResource DataTemplateItemPartida}" 
+                              HeaderTemplate="{StaticResource DataTemplateHeaderPartida}"
+                              SelectionChanged="lvPartides_SelectionChanged"></ListView>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Margin="20, 0"  x:Name="grdFormulariPartida">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" x:Name="tbCarambolesA" 
+                     Header="Caramboles soci A" 
+                     KeyDown="tbCarambolesA_KeyDown"
+                     HorizontalAlignment="Left"
+                     Height="60"></TextBox>
+            <TextBox Grid.Row="1" x:Name="tbCarambolesB"
+                     Header="Caramboles soci B" 
+                     KeyDown="tbCarambolesB_KeyDown"
+                     HorizontalAlignment="Left"
+                     Height="60"></TextBox>
+            <TextBox Grid.Row="2" x:Name="tbNumEntrades"
+                     Header="Numero entrades totals" 
+                     KeyDown="tbNumEntrades_KeyDown"
+                     HorizontalAlignment="Left"
+                     Height="60"></TextBox>
+            <ComboBox Grid.Row="3" x:Name="cbEstatPartida"
+                        Header="Estat de la partida"
+                        Height="60">
+                <ComboBoxItem Content="PENDENT"></ComboBoxItem>
+                <ComboBoxItem Content="JUGAT"></ComboBoxItem>
+            </ComboBox>
+            <ComboBox Grid.Row="4" x:Name="cbModeVictoria"
+                        Header="Mode de victoria"
+                        Height="60">
+                <ComboBoxItem Content="PER CARAMBOLES"></ComboBoxItem>
+                <ComboBoxItem Content="ENTRADES ASSOLIDES"></ComboBoxItem>
+                <ComboBoxItem Content="ABANDONAMENT"></ComboBoxItem>
+            </ComboBox>
+            <ComboBox Grid.Row="5" x:Name="cbGuanyador"
+                        Header="Guanyador"
+                        Height="60">
+            </ComboBox>
+            <StackPanel Grid.Row="6" Orientation="Horizontal">
+                <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
+                <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="5, 0">Cancelar</Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

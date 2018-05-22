@@ -66,5 +66,36 @@ namespace GestioTornejos.DB
 
             return modalitats;
         }
+
+        public static ObservableCollection<EstadisticaModalitat> GetEstadistiquesBySoci(Soci soci)
+        {
+            ObservableCollection<EstadisticaModalitat> estadistiques = new ObservableCollection<EstadisticaModalitat>();
+
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.CommandText = @"select * from estadistiques_modalitat where soci_id = @p_soci_id;";
+
+                    AddParameter(consulta, "p_soci_id", soci.Id, MySqlDbType.Int32);
+
+                    MySqlDataReader reader = consulta.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Dictionary<string, object> fila = getFila(reader);
+
+                        Modalitat modalitat = GetById((int)fila["modalitat_id"]);
+                        EstadisticaModalitat estadistica = new EstadisticaModalitat(soci, modalitat, (float)fila["coeficient_base"], (int)fila["caramboles_temporada_actual"], (int)fila["entrades_temporada_actual"]);
+
+                        estadistiques.Add(estadistica);
+                    }
+                }
+
+                connexio.Close();
+            }
+
+            return estadistiques;
+        }
     }
 }

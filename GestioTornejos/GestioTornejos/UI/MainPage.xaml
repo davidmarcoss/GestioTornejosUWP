@@ -97,9 +97,19 @@
                             <Frame x:Name="frameGrups"></Frame>
                         </Grid>
                     </PivotItem>
+                    <PivotItem Header="Entrades">
+                        <Grid>
+                            <Frame x:Name="frameEntrades"></Frame>
+                        </Grid>
+                    </PivotItem>
                     <PivotItem Header="Classificacio">
                         <Grid>
                             <Frame x:Name="frameClassificacio"></Frame>
+                        </Grid>
+                    </PivotItem>
+                    <PivotItem Header="Reports">
+                        <Grid>
+                            <Frame x:Name="frameReports"></Frame>
                         </Grid>
                     </PivotItem>
                 </Pivot>

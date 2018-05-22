@@ -16,6 +16,7 @@ namespace GestioTornejos.DB
             Encoding.RegisterProvider(ppp);
 
             string conString = "server = 127.0.0.1; uid = root; pwd = ;charset=utf8; SslMode=None ; database = billars";
+            //string conString = "server = 92.222.27.83; uid = m2-dmarcos; pwd = 23844512K;charset=utf8; SslMode=None ; database = m2_dmarcos";
             return new MySqlConnection(conString);
         }
     }

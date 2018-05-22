@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,14 @@ namespace GestioTornejos.Models
         {
             get { return cognom2; }
             set { cognom2 = value; }
+        }
+
+        private ObservableCollection<EstadisticaModalitat> estadistiques;
+
+        public ObservableCollection<EstadisticaModalitat> Estadistiques
+        {
+            get { return estadistiques; }
+            set { estadistiques = value; }
         }
 
         public Soci(int id, string nom, string cognom1, string cognom2)

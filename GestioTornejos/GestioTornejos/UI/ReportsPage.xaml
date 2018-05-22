@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="GestioTornejos.UI.ReportsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GestioTornejos.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <Button Margin="5,0" x:Name="btnReportClassificacio"
+                        Click="btnReportClassificacio_Click">Report Classificacio</Button>
+                <Button Margin="5,0" x:Name="btnReportSocis"
+                        Click="btnReportSocis_Click">Report Socis</Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Border BorderThickness="1" BorderBrush="LightGray">
+                <WebView x:Name="webView">
+                </WebView>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

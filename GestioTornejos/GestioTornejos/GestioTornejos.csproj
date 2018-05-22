@@ -105,11 +105,16 @@
     <Compile Include="DB\SociDB.cs" />
     <Compile Include="DB\TorneigDB.cs" />
     <Compile Include="Models\DialogBox.cs" />
+    <Compile Include="Models\EstadisticaModalitat.cs" />
     <Compile Include="Models\Inscripcio.cs" />
     <Compile Include="Models\Partida.cs" />
     <Compile Include="Models\Soci.cs" />
+    <Compile Include="Models\SociRanking.cs" />
     <Compile Include="UI\ClassificacioPage.xaml.cs">
       <DependentUpon>ClassificacioPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EntradesPage.xaml.cs">
+      <DependentUpon>EntradesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\GrupItemRow.xaml.cs">
       <DependentUpon>GrupItemRow.xaml</DependentUpon>
@@ -130,6 +135,15 @@
     </Compile>
     <Compile Include="UI\PartidaItemRow.xaml.cs">
       <DependentUpon>PartidaItemRow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\RankingPage.xaml.cs">
+      <DependentUpon>RankingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ReportsPage.xaml.cs">
+      <DependentUpon>ReportsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SociItemRow.xaml.cs">
+      <DependentUpon>SociItemRow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\TorneigItemRow.xaml.cs">
       <DependentUpon>TorneigItemRow.xaml</DependentUpon>
@@ -165,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\EntradesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\GrupItemRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -182,6 +200,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\PartidaItemRow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\RankingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ReportsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SociItemRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

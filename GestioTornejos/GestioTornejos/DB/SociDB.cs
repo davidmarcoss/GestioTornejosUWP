@@ -20,7 +20,7 @@ namespace GestioTornejos.DB
 
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.CommandText = @"select id, nom, cognom1, cognom2 from socis where id = @p_Id";
+                    consulta.CommandText = @"select id, nom, cognom1, cognom2 from socis s";
 
                     AddParameter(consulta, "p_Id", id, MySqlDbType.Int32);
 
@@ -29,6 +29,7 @@ namespace GestioTornejos.DB
                     if (reader.Read())
                     {
                         soci = new Soci(id, reader["nom"].ToString(), reader["cognom1"].ToString(), reader["cognom2"].ToString());
+                        soci.Estadistiques = ModalitatDB.GetEstadistiquesBySoci(soci);
                     }
                 }
 

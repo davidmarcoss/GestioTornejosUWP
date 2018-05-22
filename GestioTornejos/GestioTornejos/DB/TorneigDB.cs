@@ -20,7 +20,8 @@ namespace GestioTornejos.DB
                 connexio.Open();
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.CommandText = @"select t.* from tornejos t
+                    consulta.CommandText = @"select m.descripcio, t.* from tornejos t
+                                            left join modalitats m on t.modalitat_id = m.id
                                             where (@p_preinscripcioOberta = -1 or t.preinscripcio_oberta = @p_preinscripcioOberta)
                                             and (@p_dataFrom = '' or @p_dataTo = '') or (t.data_inici >= @p_dataFrom and t.data_inici <= @p_dataTo)
                                             and t.actiu = 1";
@@ -37,11 +38,12 @@ namespace GestioTornejos.DB
                         int torneigId = (int)fila["id"];
                         int modalitatId = (int)fila["modalitat_id"];
 
-                        Modalitat modalitat = ModalitatDB.GetById(modalitatId);
+                        Modalitat modalitat = new Modalitat((int)fila["modalitat_id"], (string)fila["descripcio"]);
                         Torneig torneig = new Torneig(torneigId, modalitat, (string)fila["nom"], (DateTime)fila["data_inici"], (DateTime)fila["data_fi"], (bool)reader["preinscripcio_oberta"]);
                         torneig.Grups = GrupDB.GetByTorneig(torneigId);
                         torneig.Inscripcions = InscripcioDB.GetByTorneig(torneigId);
                         
+                        // Passem les inscripcions a dins dels grups
                         foreach(Grup grup in torneig.Grups)
                         {
                             for (int i = torneig.Inscripcions.Count - 1; i >= 0; i--)
@@ -53,10 +55,13 @@ namespace GestioTornejos.DB
                                 }
                             }
 
+                            // Li assignem el Torneig al Grup
                             grup.Torneig = torneig;
 
+                            // Seleccionem les partides de cada grup
                             grup.Partides = PartidaDB.GetByGrup(grup);
 
+                            // Passem les partides al Torneig
                             foreach(Partida partida in grup.Partides)
                             {
                                 torneig.Partides.Add(partida);

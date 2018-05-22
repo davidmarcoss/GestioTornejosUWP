@@ -56,7 +56,15 @@ namespace GestioTornejos
                 }
                 else if (actionPivots.SelectedIndex == 2)
                 {
+                    frameEntrades.Navigate(typeof(EntradesPage), mainPageShared);
+                }
+                else if (actionPivots.SelectedIndex == 3)
+                {
                     frameClassificacio.Navigate(typeof(ClassificacioPage), mainPageShared);
+                }
+                else if (actionPivots.SelectedIndex == 4)
+                {
+                    frameReports.Navigate(typeof(ReportsPage), mainPageShared);
                 }
             }
         }

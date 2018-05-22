@@ -1,5 +1,4 @@
-﻿using GestioTornejos.DB;
-using GestioTornejos.Models;
+﻿using GestioTornejos.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,7 +22,8 @@ namespace GestioTornejos.UI
         private Shared mainPageShared = new Shared(0, new ObservableCollection<Torneig>(), new ListView());
         private Torneig Torneig;
         private Grup grup;
-        private Partida partida;
+        private ObservableCollection<Soci> socis = new ObservableCollection<Soci>();
+        private ObservableCollection<SociRanking> socisRanking = new ObservableCollection<SociRanking>();
 
         public ClassificacioPage()
         {
@@ -41,151 +40,109 @@ namespace GestioTornejos.UI
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             lvGrups.ItemsSource = Torneig.Grups;
-
-            FormEnabled(false);
-        }
-        
-        private void FormEnabled(bool status)
-        {
-            tbCarambolesA.IsEnabled
-                = tbCarambolesB.IsEnabled
-                = tbNumEntrades.IsEnabled
-                = cbEstatPartida.IsEnabled
-                = cbGuanyador.IsEnabled
-                = cbModeVictoria.IsEnabled
-                = status; 
-        }
-
-        private void btnGuardar_Click(object sender, RoutedEventArgs e)
-        {
-            if (checkForm())
-            {
-                partida.CarambolesA = Int32.Parse(tbCarambolesA.Text);
-                partida.CarambolesB = Int32.Parse(tbCarambolesA.Text);
-                partida.NumEntrades = Int32.Parse(tbNumEntrades.Text);
-                partida.EstatPartida = (EstatPartida) cbEstatPartida.SelectedIndex;
-                partida.Guanyador = (Guanyador) cbGuanyador.SelectedIndex;
-                partida.ModeVictoria = (ModeVictoria) cbModeVictoria.SelectedIndex;
-
-                if (PartidaDB.Update(partida))
-                {
-                    populateForm();
-                }
-            }
-        }
-
-        private void btnCancelar_Click(object sender, RoutedEventArgs e)
-        {
-            populateForm();
-        }
-
-        private void populateForm()
-        {
-            tbCarambolesA.Text = partida.CarambolesA.ToString();
-            tbCarambolesB.Text = partida.CarambolesB.ToString();
-            tbNumEntrades.Text = partida.NumEntrades.ToString();
-            cbEstatPartida.SelectedIndex = (int)partida.EstatPartida;
-            cbModeVictoria.SelectedIndex = (int)partida.ModeVictoria;
-            cbGuanyador.Items.Clear();
-            cbGuanyador.Items.Add(partida.SociA);
-            cbGuanyador.Items.Add(partida.SociB);
-            cbGuanyador.SelectedIndex = (int)partida.Guanyador;
-        }
-
-        private void tbCarambolesA_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (!e.Key.ToString().Contains("Number"))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                try
-                {
-                    Int32.Parse(tbCarambolesA.Text + e.Key.ToString().Replace("Number", ""));
-                }
-                catch (OverflowException) { e.Handled = true; }
-            }
-        }
-
-        private void tbCarambolesB_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (!e.Key.ToString().Contains("Number"))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                try
-                {
-                    Int32.Parse(tbCarambolesB.Text + e.Key.ToString().Replace("Number", ""));
-                }
-                catch (OverflowException) { e.Handled = true; }
-            }
-        }
-
-        private void tbNumEntrades_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (!e.Key.ToString().Contains("Number"))
-            {
-                e.Handled = true;
-            }
-            else
-            {
-                try
-                {
-                    Int32.Parse(tbNumEntrades.Text + e.Key.ToString().Replace("Number", ""));
-                }
-                catch (OverflowException) { e.Handled = true; }
-            }
-        }
-
-        private bool checkForm()
-        {
-            if (tbCarambolesA.Text.Equals("") || Int32.Parse(tbCarambolesA.Text) < 0)
-            {
-                tbCarambolesA.Background = new SolidColorBrush(Colors.Red);
-                return false;
-            }
-            else
-            {
-                tbCarambolesA.Background = new SolidColorBrush(Colors.Transparent);
-            }
-
-            if (tbCarambolesB.Text.Equals("") || Int32.Parse(tbCarambolesB.Text) < 0)
-            {
-                tbCarambolesB.Background = new SolidColorBrush(Colors.Red);
-                return false;
-            }
-            else
-            {
-                tbCarambolesB.Background = new SolidColorBrush(Colors.Transparent);
-            }
-
-            if (tbNumEntrades.Text.Equals("") || Int32.Parse(tbNumEntrades.Text) < 0)
-            {
-                tbNumEntrades.Background = new SolidColorBrush(Colors.Red);
-                return false;
-            }
-            else
-            {
-                tbNumEntrades.Background = new SolidColorBrush(Colors.Transparent);
-            }
-
-            return true;
         }
 
         private void lvGrups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            socisRanking.Clear();
+
             grup = Torneig.Grups[lvGrups.SelectedIndex];
-            lvPartides.ItemsSource = grup.Partides;
+            foreach(Inscripcio inscripcio in grup.Inscripcions)
+            {
+                socis.Add(inscripcio.Soci);
+            }
+
+            socisRanking = new ObservableCollection<SociRanking>();
+
+            foreach(Soci soci in socis)
+            {
+                SociRanking sociRanking = new SociRanking();
+            
+                string nom = soci.Nom + " " + soci.Cognom1 + " " + soci.Cognom2;
+                int partidesJugades = GetCountPartidesJugades(soci);
+                int partidesGuanyades = GetCountPartidesGuanyades(soci);
+                int partidesPerdudes = GetCountPartidesPerdudes(soci);
+                float coeficient = GetCoeficient(soci);
+
+                sociRanking.Nom = nom;
+                sociRanking.PartidesJugades = partidesJugades;
+                sociRanking.PartidesGuanyades = partidesGuanyades;
+                sociRanking.PartidesPerdudes = partidesPerdudes;
+                sociRanking.Coeficient = coeficient;
+
+                socisRanking.Add(sociRanking);
+            }
+
+            lvSocis.ItemsSource = socisRanking;
         }
 
-        private void lvPartides_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private int GetCountPartidesJugades(Soci soci)
         {
-            partida = grup.Partides[lvPartides.SelectedIndex];
-            populateForm();
-            FormEnabled(true);
+            int count = 0;
+
+            foreach(Partida partida in grup.Partides)
+            {
+                if ((partida.SociA.Equals(soci) || partida.SociB.Equals(soci)) && partida.EstatPartida == EstatPartida.JUGAT)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private int GetCountPartidesGuanyades(Soci soci)
+        {
+            int count = 0;
+
+            foreach (Partida partida in grup.Partides)
+            {
+                if (partida.EstatPartida == EstatPartida.JUGAT)
+                {
+                    if ((partida.Guanyador == Guanyador.A && partida.SociA.Equals(soci)) 
+                        || (partida.Guanyador == Guanyador.B && partida.SociB.Equals(soci)))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private int GetCountPartidesPerdudes(Soci soci)
+        {
+            int count = 0;
+
+            foreach (Partida partida in grup.Partides)
+            {
+                if (partida.EstatPartida == EstatPartida.JUGAT)
+                {
+                    if ((partida.Guanyador == Guanyador.A && !partida.SociA.Equals(soci))
+                        || (partida.Guanyador == Guanyador.B && !partida.SociB.Equals(soci)))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private float GetCoeficient(Soci soci)
+        {
+            float coeficient = 0;
+
+            foreach(EstadisticaModalitat estadistica in soci.Estadistiques)
+            {
+                if (estadistica.Modalitat.Equals(Torneig.Modalitat))
+                {
+                    coeficient = estadistica.CoeficientBase;
+                    break;
+                }
+            }
+
+            return coeficient;
         }
     }
 }

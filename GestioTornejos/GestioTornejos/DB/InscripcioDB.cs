@@ -20,7 +20,8 @@ namespace GestioTornejos.DB
                 connexio.Open();
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.CommandText = @"select * from inscripcions
+                    consulta.CommandText = @"select s.id as 'soci_id', s.nom, s.cognom1, s.cognom2, i.* from inscripcions i
+                                            left join socis s on i.soci_id = s.id
                                             where torneig_id = @p_torneigId";
 
                     AddParameter(consulta, "p_torneigId", torneigId, MySqlDbType.Int32);
@@ -30,7 +31,8 @@ namespace GestioTornejos.DB
                     {
                         Dictionary<string, object> fila = getFila(reader);
 
-                        Soci soci = SociDB.GetById((int)reader["soci_id"]);
+                        Soci soci = soci = new Soci((int)reader["soci_id"], reader["nom"].ToString(), reader["cognom1"].ToString(), reader["cognom2"].ToString());
+                        soci.Estadistiques = ModalitatDB.GetEstadistiquesBySoci(soci);
                         Inscripcio inscripcio = new Inscripcio((int)reader["id"], (DateTime)reader["data_creacio"], soci);
                         try
                         {
