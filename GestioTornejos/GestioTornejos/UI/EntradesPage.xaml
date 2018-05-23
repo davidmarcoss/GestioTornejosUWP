@@ -13,7 +13,7 @@
             <local:GrupItemRow Grup="{Binding this}"></local:GrupItemRow>
         </DataTemplate>
         <DataTemplate x:Key="DataTemplateHeader">
-            <Grid>
+            <Grid Background="#F9F9F9" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -29,11 +29,11 @@
             <local:PartidaItemRow Partida="{Binding this}"></local:PartidaItemRow>
         </DataTemplate>
         <DataTemplate x:Key="DataTemplateHeaderPartida">
-            <Grid>
+            <Grid Background="#F9F9F9" Padding="10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Soci A" Grid.Column="0" FontWeight="Bold" Margin="0, 0, 5, 0"></TextBlock>
@@ -46,8 +46,8 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -55,74 +55,82 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <ScrollViewer Padding="10">
-                    <ListView x:Name="lvGrups" 
+                <StackPanel Padding="10">
+                    <TextBlock Text="Grups"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                               Margin="5"></TextBlock>
+                    <ScrollViewer>
+                        <ListView x:Name="lvGrups" 
                               ItemTemplate="{StaticResource DataTemplateItem}" 
                               HeaderTemplate="{StaticResource DataTemplateHeader}"
                               SelectionChanged="lvGrups_SelectionChanged"></ListView>
-                </ScrollViewer>
+                    </ScrollViewer>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <ScrollViewer Padding="10">
-                    <ListView x:Name="lvPartides" 
+                <StackPanel Padding="10">
+                    <TextBlock Text="Partides del grup"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                           Margin="5"></TextBlock>
+                    <ScrollViewer>
+                        <ListView x:Name="lvPartides" 
                               ItemTemplate="{StaticResource DataTemplateItemPartida}" 
                               HeaderTemplate="{StaticResource DataTemplateHeaderPartida}"
                               SelectionChanged="lvPartides_SelectionChanged"></ListView>
-                </ScrollViewer>
+                    </ScrollViewer>
+                </StackPanel>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1" Margin="20, 0"  x:Name="grdFormulariPartida">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
-            </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" x:Name="tbCarambolesA" 
-                     Header="Caramboles soci A" 
-                     KeyDown="tbCarambolesA_KeyDown"
-                     HorizontalAlignment="Left"
-                     Height="60"></TextBox>
-            <TextBox Grid.Row="1" x:Name="tbCarambolesB"
-                     Header="Caramboles soci B" 
-                     KeyDown="tbCarambolesB_KeyDown"
-                     HorizontalAlignment="Left"
-                     Height="60"></TextBox>
-            <TextBox Grid.Row="2" x:Name="tbNumEntradesA"
-                     Header="Entrades soci A" 
-                     KeyDown="tbNumEntradesA_KeyDown"
-                     HorizontalAlignment="Left"
-                     Height="60"></TextBox>
-            <TextBox Grid.Row="3" x:Name="tbNumEntradesB"
-                     Header="Entrades soci B" 
-                     KeyDown="tbNumEntradesB_KeyDown"
-                     HorizontalAlignment="Left"
-                     Height="60"></TextBox>
-            <ComboBox Grid.Row="4" x:Name="cbEstatPartida"
+        <Grid Grid.Column="1" Margin="24, 0" x:Name="grdFormulariPartida" HorizontalAlignment="Center">
+            <StackPanel>
+                <RelativePanel>
+                    <TextBox x:Name="tbCarambolesA" 
+                         Header="Caramboles soci A" 
+                         KeyDown="tbCarambolesA_KeyDown"
+                         HorizontalAlignment="Left"
+                         Height="60" Margin="0,24,0,0"></TextBox>
+                    <TextBox x:Name="tbNumEntradesA"
+                         Header="Entrades soci A" 
+                         KeyDown="tbNumEntradesA_KeyDown"
+                         HorizontalAlignment="Left"
+                         Height="60" Margin="24,24,0,0"
+                            RelativePanel.RightOf="tbCarambolesA"></TextBox>
+                </RelativePanel>
+                <RelativePanel>
+                    <TextBox x:Name="tbCarambolesB"
+                         Header="Caramboles soci B" 
+                         KeyDown="tbCarambolesB_KeyDown"
+                         HorizontalAlignment="Left"
+                         Height="60" Margin="0,24,0,0"></TextBox>
+
+                    <TextBox x:Name="tbNumEntradesB"
+                         Header="Entrades soci B" 
+                         KeyDown="tbNumEntradesB_KeyDown"
+                         HorizontalAlignment="Left"
+                         Height="60" Margin="24,24,0,0"
+                             RelativePanel.RightOf="tbCarambolesB"></TextBox>
+                </RelativePanel>
+                <ComboBox x:Name="cbEstatPartida"
                         Header="Estat de la partida"
-                        Height="60">
-                <ComboBoxItem Content="PENDENT"></ComboBoxItem>
-                <ComboBoxItem Content="JUGAT"></ComboBoxItem>
-            </ComboBox>
-            <ComboBox Grid.Row="5" x:Name="cbModeVictoria"
+                        Height="60" Margin="0,24,0,0">
+                    <ComboBoxItem Content="PENDENT"></ComboBoxItem>
+                    <ComboBoxItem Content="JUGAT"></ComboBoxItem>
+                </ComboBox>
+                <ComboBox x:Name="cbModeVictoria"
                         Header="Mode de victoria"
-                        Height="60">
-                <ComboBoxItem Content="PER CARAMBOLES"></ComboBoxItem>
-                <ComboBoxItem Content="ENTRADES ASSOLIDES"></ComboBoxItem>
-                <ComboBoxItem Content="ABANDONAMENT"></ComboBoxItem>
-            </ComboBox>
-            <ComboBox Grid.Row="6" x:Name="cbGuanyador"
+                        Height="60" Margin="0,24,0,0">
+                    <ComboBoxItem Content="PER CARAMBOLES"></ComboBoxItem>
+                    <ComboBoxItem Content="ENTRADES ASSOLIDES"></ComboBoxItem>
+                    <ComboBoxItem Content="ABANDONAMENT"></ComboBoxItem>
+                </ComboBox>
+                <ComboBox x:Name="cbGuanyador"
                         Header="Guanyador"
-                        Height="60">
-            </ComboBox>
-            <StackPanel Grid.Row="7" Orientation="Horizontal">
-                <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
-                <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="5, 0">Cancelar</Button>
+                        Height="60" Margin="0,24,0,0">
+                </ComboBox>
+                <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
+                    <Button x:Name="btnGuardar" Click="btnGuardar_Click">Guardar</Button>
+                    <Button x:Name="btnCancelar" Click="btnCancelar_Click" Margin="10, 0">Cancelar</Button>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

@@ -13,7 +13,7 @@
             <local:GrupItemRow Grup="{Binding this}"></local:GrupItemRow>
         </DataTemplate>
         <DataTemplate x:Key="DataTemplateHeader">
-            <Grid>
+            <Grid Background="#F9F9F9" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -77,12 +77,17 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <ScrollViewer>
-                <ListView x:Name="lvGrups" 
+            <StackPanel>
+                <TextBlock Text="Grups"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                           Margin="5"></TextBlock>
+                <ScrollViewer>
+                    <ListView x:Name="lvGrups" 
                           ItemTemplate="{StaticResource DataTemplateItem}" 
                           HeaderTemplate="{StaticResource DataTemplateHeader}"
                           SelectionChanged="lvGrups_SelectionChanged"></ListView>
-            </ScrollViewer>
+                </ScrollViewer>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

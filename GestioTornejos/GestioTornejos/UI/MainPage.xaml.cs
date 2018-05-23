@@ -24,7 +24,7 @@ namespace GestioTornejos
         {
             if (!MySQL.CheckConnexio())
             {
-                ErrorAndAbort("Error en la connexió", "No s'ha pogut establir connexió amb la base de dades, accepta per abortar la aplicació.");
+                ErrorAndAbort("Error en la connexió", "No s'ha pogut establir connexió amb la base de dades, la aplicació es tancarà.");
             }
             else
             {

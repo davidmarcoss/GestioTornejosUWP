@@ -7,9 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded"
-    Width="1920"
-    Height="1080">
+    Loaded="Page_Loaded">
 
     <Page.Resources>
         <DataTemplate x:Key="DataTemplateTorneigRow">
@@ -28,65 +26,58 @@
                 <RowDefinition Height="6*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Padding="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" 
-                           Text="Filtres"
-                           FontWeight="Bold"></TextBlock>
+                <StackPanel>
+                    <TextBlock Text="Filtres"
+                                Style="{StaticResource TitleTextBlockStyle}"></TextBlock>
 
-                <CheckBox x:Name="cbFiltreDates" Grid.Row="1" Checked="cbFiltreDates_Checked" Unchecked="cbFiltreDates_Unchecked">Filtrar per dates</CheckBox>
+                    <CheckBox x:Name="cbFiltreDates" Checked="cbFiltreDates_Checked" 
+                              Unchecked="cbFiltreDates_Unchecked"
+                              Margin="0, 24, 0, 0">Filtrar per dates</CheckBox>
                 
-                <DatePicker Grid.Row="2" 
-                            Header="Entre dates"
-                            HorizontalAlignment="Stretch"
-                            MinWidth="270"
-                            x:Name="dpDataFrom"
-                            DateChanged="dpDataFrom_DateChanged"></DatePicker>
+                    <DatePicker Header="Entre dates"
+                                HorizontalAlignment="Stretch"
+                                MinWidth="270"
+                                x:Name="dpDataFrom"
+                                DateChanged="dpDataFrom_DateChanged"
+                                Margin="0, 12, 0, 0"></DatePicker>
 
-                <DatePicker Grid.Row="3" 
-                            HorizontalAlignment="Stretch"
-                            MinWidth="270"
-                            x:Name="dpDataTo"
-                            DateChanged="dpDataTo_DateChanged"></DatePicker>
+                    <DatePicker HorizontalAlignment="Stretch"
+                                MinWidth="270"
+                                x:Name="dpDataTo"
+                                DateChanged="dpDataTo_DateChanged"
+                                Margin="0, 24, 0, 0"></DatePicker>
                 
-                <ComboBox Grid.Row="4" 
-                          Header="Estat"
-                          HorizontalAlignment="Stretch"
-                          x:Name="cbEstats">
-                    <ComboBoxItem Content="TOTS"></ComboBoxItem>
-                    <ComboBoxItem Content="PENDENT"></ComboBoxItem>
-                    <ComboBoxItem Content="JUGAT"></ComboBoxItem>
-                </ComboBox>
+                    <ComboBox Header="Estat"
+                              HorizontalAlignment="Stretch"
+                              x:Name="cbEstats"
+                              Margin="0, 24, 0, 0">
+                        <ComboBoxItem Content="TOTS"></ComboBoxItem>
+                        <ComboBoxItem Content="PENDENT"></ComboBoxItem>
+                        <ComboBoxItem Content="JUGAT"></ComboBoxItem>
+                    </ComboBox>
                 
-                <Button Grid.Row="5" x:Name="btnAplicarFiltres" Click="btnAplicarFiltres_Click">Cercar</Button>
+                    <Button x:Name="btnAplicarFiltres" Click="btnAplicarFiltres_Click"
+                            Margin="0, 24, 0, 0">Cercar</Button>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"></RowDefinition>
-                    <RowDefinition Height="9*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*"></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Tornejos" Margin="10"
-                           FontWeight="Bold" Grid.Column="0"
-                               VerticalAlignment="Center"></TextBlock>
-                    <Button Grid.Column="1" x:Name="btnReload" Click="btnReload_Click">Refrescar</Button>
-                </Grid>
+                <StackPanel>
+                    <Grid Grid.Row="0" Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Tornejos" 
+                                Style="{StaticResource TitleTextBlockStyle}"></TextBlock>
+                        <Button Grid.Column="1" x:Name="btnReload" Click="btnReload_Click">Refrescar</Button>
+                    </Grid>
 
-                <ScrollViewer Grid.Row="1">
-                    <ListView ItemContainerStyle="{StaticResource ListViewItemContainerStyle1}" x:Name="lvTornejos" Padding="0" Margin="0" 
-                              ItemTemplate="{StaticResource DataTemplateTorneigRow}"
-                              SelectionChanged="lvTornejos_SelectionChanged"></ListView>
-                </ScrollViewer>
+                    <ScrollViewer Grid.Row="1" Margin="0, 24">
+                        <ListView ItemContainerStyle="{StaticResource ListViewItemContainerStyle1}" x:Name="lvTornejos" Padding="0" Margin="0" 
+                                  ItemTemplate="{StaticResource DataTemplateTorneigRow}"
+                                  SelectionChanged="lvTornejos_SelectionChanged"></ListView>
+                    </ScrollViewer>
+                </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">

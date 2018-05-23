@@ -13,7 +13,7 @@
             <local:GrupItemRow Grup="{Binding this}"></local:GrupItemRow>
         </DataTemplate>
         <DataTemplate x:Key="DataTemplateHeader">
-            <Grid>
+            <Grid Background="#F9F9F9" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"></ColumnDefinition>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -29,7 +29,7 @@
             <local:SociItemRow SociRanking="{Binding this}"></local:SociItemRow>
         </DataTemplate>
         <DataTemplate x:Key="DataTemplateHeaderPartida">
-            <Grid>
+            <Grid Background="#F9F9F9" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -52,20 +52,30 @@
             <RowDefinition Height="5*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <ScrollViewer Padding="10">
-                <ListView x:Name="lvGrups" 
-                            ItemTemplate="{StaticResource DataTemplateItem}" 
-                            HeaderTemplate="{StaticResource DataTemplateHeader}"
-                            SelectionChanged="lvGrups_SelectionChanged"></ListView>
-            </ScrollViewer>
+        <Grid Grid.Row="0" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Grups"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                           Margin="5"></TextBlock>
+                <ScrollViewer>
+                    <ListView x:Name="lvGrups" 
+                                ItemTemplate="{StaticResource DataTemplateItem}" 
+                                HeaderTemplate="{StaticResource DataTemplateHeader}"
+                                SelectionChanged="lvGrups_SelectionChanged"></ListView>
+                </ScrollViewer>
+            </StackPanel>
         </Grid>
-        <Grid Grid.Row="1">
-            <ScrollViewer Padding="10">
-                <ListView x:Name="lvSocis" 
+        <Grid Grid.Row="1" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Socis del grup"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                           Margin="5"></TextBlock>
+                <ScrollViewer>
+                    <ListView x:Name="lvSocis" 
                             HeaderTemplate="{StaticResource DataTemplateHeaderPartida}"
                             ItemTemplate="{StaticResource DataTemplateSoci}"></ListView>
-            </ScrollViewer>
+                </ScrollViewer>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>
