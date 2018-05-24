@@ -77,7 +77,7 @@ namespace GestioTornejos.DB
             return tornejos;
         }
 
-        public static bool InsertOrUdate(Torneig torneig)
+        public static bool InsertOrUdate(Torneig torneig, bool esInsert)
         {
             using (MySqlConnection connexio = MySQL.GetConnexio())
             {
@@ -87,12 +87,9 @@ namespace GestioTornejos.DB
 
                 using (MySqlCommand consulta = connexio.CreateCommand())
                 {
-                    consulta.Transaction = trans;
-
-                    bool esInsert = (torneig.Id <= 0);
                     if (esInsert)
                     {
-                        consulta.CommandText = "insert into tornejos (modalitat_id, nom, data_inici, data_fi, preinscripcio_oberta, actiu) values (@p_modalitatId, @p_nom, @p_dataInici, @p_dataFi, 1, 1)";
+                        consulta.CommandText = "insert into tornejos (id, modalitat_id, nom, data_inici, data_fi, preinscripcio_oberta, actiu) values (@p_id, @p_modalitatId, @p_nom, @p_dataInici, @p_dataFi, 1, 1)";
                     }
                     else
                     {
@@ -118,8 +115,9 @@ namespace GestioTornejos.DB
                         {
                             if (esInsert)
                             {
-                                torneig.Id = (int)consulta.LastInsertedId;
+                                SetLasId("tornejos", torneig.Id + 1);
                             }
+
                             trans.Commit();
                         }
 

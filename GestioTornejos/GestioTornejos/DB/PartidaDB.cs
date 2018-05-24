@@ -23,9 +23,10 @@ namespace GestioTornejos.DB
                 {
                     consulta.Transaction = trans;
 
-                    consulta.CommandText = "insert into partides (sociA_id, sociB_id, torneig_id, grup_id, data_realitzacio) " +
-                                             "values (@p_sociA_id, @p_sociB_id, @p_torneig_id, @p_grup_id,  null)";
+                    consulta.CommandText = "insert into partides (id, sociA_id, sociB_id, torneig_id, grup_id, data_realitzacio) " +
+                                             "values (@p_id, @p_sociA_id, @p_sociB_id, @p_torneig_id, @p_grup_id,  null)";
 
+                    AddParameter(consulta, "p_id", 1, MySqlDbType.Int32);
                     AddParameter(consulta, "p_sociA_id", "", MySqlDbType.Int32);
                     AddParameter(consulta, "p_sociB_id", "", MySqlDbType.Int32);
                     AddParameter(consulta, "p_torneig_id", torneig.Id, MySqlDbType.Int32);
@@ -39,6 +40,7 @@ namespace GestioTornejos.DB
 
                         foreach(Partida partida in torneig.Partides)
                         {
+                            mspc[mspc.IndexOf("p_id")].Value = partida.Id;
                             mspc[mspc.IndexOf("p_sociA_id")].Value = partida.SociA.Id;
                             mspc[mspc.IndexOf("p_sociB_id")].Value = partida.SociB.Id;
                             mspc[mspc.IndexOf("p_grup_id")].Value = partida.Grup.Id;
@@ -53,6 +55,7 @@ namespace GestioTornejos.DB
                         if (isInserted)
                         {
                             trans.Commit();
+                            SetLasId("partides", torneig.Partides.Last().Id + 1);
                         }
                     }
                     catch (Exception e)

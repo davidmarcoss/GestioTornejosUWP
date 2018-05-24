@@ -85,10 +85,10 @@ namespace GestioTornejos.DB
                 {
                     consulta.Transaction = trans;
 
-                    consulta.CommandText = "insert into grups (torneig_id, descripcio, caramboles_victoria, limit_entrades) " +
-                                             "values (@p_torneigId, @p_descripcio, @p_carambolesVictoria, @p_limitEntrades)";
-  
+                    consulta.CommandText = "insert into grups (id, torneig_id, descripcio, caramboles_victoria, limit_entrades) " +
+                                             "values (@p_id, @p_torneigId, @p_descripcio, @p_carambolesVictoria, @p_limitEntrades)";
 
+                    AddParameter(consulta, "p_id", grup.Id, MySqlDbType.Int32);
                     AddParameter(consulta, "p_torneigId", torneig.Id, MySqlDbType.Int32);
                     AddParameter(consulta, "p_descripcio", grup.Descripcio, MySqlDbType.String);
                     AddParameter(consulta, "p_carambolesVictoria", grup.CarambolesVictoria, MySqlDbType.Int32);
@@ -103,11 +103,10 @@ namespace GestioTornejos.DB
                         }
                         else
                         {
-                            grup.Id = (int)consulta.LastInsertedId;
+                            SetLasId("grups", grup.Id + 1);
 
                             consulta.CommandText = @"update inscripcions set grup_id=@p_grupId where id = @p_id";
                             AddParameter(consulta, "p_grupId", "", MySqlDbType.Int32);
-                            AddParameter(consulta, "p_id", "", MySqlDbType.Int32);
                             foreach (Inscripcio inscripcio in grup.Inscripcions)
                             {
                                 MySqlParameterCollection mspc = consulta.Parameters;

@@ -161,7 +161,8 @@ namespace GestioTornejos.UI
             {
                 if (isNou)
                 {
-                    Grup nouGrup = new Grup(-1, tbDescripcio.Text, Int32.Parse(tbCarambolesVictoria.Text), Int32.Parse(tbLimitEntrades.Text));
+                    int lastId = DB.DB.GetLastId("grups");
+                    Grup nouGrup = new Grup(lastId, tbDescripcio.Text, Int32.Parse(tbCarambolesVictoria.Text), Int32.Parse(tbLimitEntrades.Text));
                     nouGrup.Inscripcions = new ObservableCollection<Inscripcio>(inscripcionsGrupCopia);
                     GrupDB.Insert(Torneig, nouGrup);
 
@@ -302,14 +303,24 @@ namespace GestioTornejos.UI
 
         private void btnEmparellaments_Click(object sender, RoutedEventArgs e)
         {
+            bool shouldInsert = true;
+
             if (inscripcionsCopia.Count > 0)
             {
-                DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que tindre tots els inscrits a dins d'un grup");
+                DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que tindre tots els inscrits a dins dels grups");
             }
             else
             {
+                int lastId = DB.DB.GetLastId("partides");
                 foreach (Grup grup in Torneig.Grups)
                 {
+                    if (grup.Inscripcions.Count <= 1)
+                    {
+                        DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que més de una inscripció al grup");
+                        shouldInsert = false;
+                        break;
+                    }
+
                     int cont = 0;
                     foreach (Inscripcio inscripcio in grup.Inscripcions)
                     {
@@ -322,16 +333,22 @@ namespace GestioTornejos.UI
                         {
                             Inscripcio inscripcio2 = grup.Inscripcions[i];
 
-                            Partida partida = new Partida(-1, inscripcio.Soci, inscripcio2.Soci, grup, Torneig, 0, 0, 0, 0, EstatPartida.PENDENT);
+                            Partida partida = new Partida(lastId, inscripcio.Soci, inscripcio2.Soci, grup, Torneig, 0, 0, 0, 0, EstatPartida.PENDENT);
 
                             Torneig.Partides.Add(partida);
+                            grup.Partides.Add(partida);
+
+                            lastId++;
                         }
 
                         cont++;
                     }
                 }
 
-                PartidaDB.Insert(Torneig);
+                if (shouldInsert)
+                {
+                    PartidaDB.Insert(Torneig);
+                }
             }
         }
 

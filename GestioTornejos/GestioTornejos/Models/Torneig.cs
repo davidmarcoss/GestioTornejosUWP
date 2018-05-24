@@ -92,6 +92,7 @@ namespace GestioTornejos.Models
             DataInici = dataInici;
             DataFi = dataFi;
             PreinscripcioOberta = preinscripcioOberta;
+            Grups = new ObservableCollection<Grup>();
             Inscripcions = new ObservableCollection<Inscripcio>();
             Partides = new ObservableCollection<Partida>();
         }

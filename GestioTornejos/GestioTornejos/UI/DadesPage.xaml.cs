@@ -70,8 +70,9 @@ namespace GestioTornejos.UI
             {
                 if (isNou)
                 {
-                    Torneig nouTorneig = new Torneig(-1, (Modalitat)cbModalitats.SelectedItem, tbNom.Text, dpDataInici.Date.DateTime, dpDataFi.Date.DateTime, true);
-                    TorneigDB.InsertOrUdate(nouTorneig);
+                    int lastId = DB.DB.GetLastId("tornejos");
+                    Torneig nouTorneig = new Torneig(lastId, (Modalitat)cbModalitats.SelectedItem, tbNom.Text, dpDataInici.Date.DateTime, dpDataFi.Date.DateTime, true);
+                    TorneigDB.InsertOrUdate(nouTorneig, true);
                     Torneig = nouTorneig;
                     mainPageShared.OcTornejos.Add(Torneig);
                 }
@@ -81,7 +82,7 @@ namespace GestioTornejos.UI
                     Torneig.DataInici = dpDataInici.Date.DateTime;
                     Torneig.DataFi = dpDataFi.Date.DateTime;
                     Torneig.Modalitat = (Modalitat) cbModalitats.SelectedItem;
-                    TorneigDB.InsertOrUdate(Torneig);
+                    TorneigDB.InsertOrUdate(Torneig, false);
                 }
 
                 populateForm();

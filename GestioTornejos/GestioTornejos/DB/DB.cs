@@ -32,5 +32,70 @@ namespace GestioTornejos.DB
             return fila;
         }
         
+        public static int GetLastId(String taula)
+        {
+            int id = 0;
+
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.CommandText = @"select next_val from comptadors where clau = @p_clau";
+
+                    AddParameter(consulta, "p_clau", taula, MySqlDbType.String);
+
+                    MySqlDataReader reader = consulta.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        id = Int32.Parse(((Int64)reader["next_val"]).ToString());
+                    }
+                }
+
+                connexio.Close();
+            }
+
+            return id;
+        }
+
+        public static bool SetLasId(String taula, int id)
+        {
+            using (MySqlConnection connexio = MySQL.GetConnexio())
+            {
+                connexio.Open();
+
+                MySqlTransaction trans = connexio.BeginTransaction();
+                using (MySqlCommand consulta = connexio.CreateCommand())
+                {
+                    consulta.CommandText = @"update comptadors set next_val = @p_next_val where clau = @p_clau";
+
+                    AddParameter(consulta, "p_clau", taula, MySqlDbType.String);
+                    AddParameter(consulta, "p_next_val", id, MySqlDbType.Int32);
+
+                    try
+                    {
+                        if (consulta.ExecuteNonQuery() != 1)
+                        {
+                            trans.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            trans.Commit();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+
+                connexio.Close();
+            }
+
+            return true;
+        }
     }
 }
