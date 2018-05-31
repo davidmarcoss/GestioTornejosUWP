@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GestioTornejos.Models
 {
-    public class Partida
+    public class Partida : INotifyPropertyChanged
     {
         private int id;
 
@@ -107,6 +108,8 @@ namespace GestioTornejos.Models
 
         private Guanyador guanyador;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public Guanyador Guanyador
         {
             get { return guanyador; }
@@ -141,7 +144,8 @@ namespace GestioTornejos.Models
             NumEntradesA = numEntradesA;
             NumEntradesB = numEntradesB;
             EstatPartida = estatPartida;
-            ModeVictoria = ModeVictoria;
+            ModeVictoria = modeVictoria;
+            Guanyador = guanyador;
         }
     }
 

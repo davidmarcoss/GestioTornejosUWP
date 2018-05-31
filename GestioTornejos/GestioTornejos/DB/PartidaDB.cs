@@ -111,11 +111,7 @@ namespace GestioTornejos.DB
                             }
 
 
-                            Guanyador guanyador = Guanyador.A;
-                            if (guanyadorDB == 1)
-                            {
-                                guanyador = Guanyador.B;
-                            }
+                            Guanyador guanyador = (Guanyador) guanyadorDB;
 
                             partida = new Partida((int)fila["id"], inscripcioA.Soci, inscripcioB.Soci, grup, grup.Torneig, (int)fila["carambolesA"], (int)fila["carambolesB"], dt, (int)fila["num_entradesA"], (int)fila["num_entradesB"], estatPartida, modeVictoria, guanyador);
                         }

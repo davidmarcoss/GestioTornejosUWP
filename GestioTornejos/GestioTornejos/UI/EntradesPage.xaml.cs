@@ -147,12 +147,12 @@ namespace GestioTornejos.UI
             tbCarambolesB.Text = partida.CarambolesB.ToString();
             tbNumEntradesA.Text = partida.NumEntradesA.ToString();
             tbNumEntradesB.Text = partida.NumEntradesB.ToString();
-            cbEstatPartida.SelectedIndex = (int)partida.EstatPartida;
-            cbModeVictoria.SelectedIndex = (int)partida.ModeVictoria;
+            cbEstatPartida.SelectedIndex = (int) partida.EstatPartida;
+            cbModeVictoria.SelectedIndex = (int) partida.ModeVictoria;
             cbGuanyador.Items.Clear();
             cbGuanyador.Items.Add(partida.SociA);
             cbGuanyador.Items.Add(partida.SociB);
-            cbGuanyador.SelectedIndex = (int)partida.Guanyador;
+            cbGuanyador.SelectedIndex = (int) partida.Guanyador;
         }
 
         private void tbCarambolesA_KeyDown(object sender, KeyRoutedEventArgs e)

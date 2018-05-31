@@ -73,7 +73,9 @@ namespace GestioTornejos.UI
                 socisRanking.Add(sociRanking);
             }
 
-            lvSocis.ItemsSource = socisRanking;
+            var socisRankingOrdered = socisRanking.OrderByDescending(sr => sr.Coeficient);
+
+            lvSocis.ItemsSource = socisRankingOrdered;
         }
 
         private int GetCountPartidesJugades(Soci soci)

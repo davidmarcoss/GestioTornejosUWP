@@ -39,7 +39,6 @@ namespace GestioTornejos.UI
             lvGrups.ItemsSource = Torneig.Grups;
 
             inscripcionsCopia = new ObservableCollection<Inscripcio>(Torneig.Inscripcions);
-            inscripcionsCopia.OrderBy(ins => ins.Soci.Estadistiques.Single(estadistica => estadistica.Modalitat.Equals(Torneig.Modalitat)).CoeficientBase);
             lvInscrits.ItemsSource = inscripcionsCopia;
 
             if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
@@ -68,28 +67,31 @@ namespace GestioTornejos.UI
 
         private void lvGrups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (inscripcionsGrupCopia != null && inscripcionsGrupCopia.Count >= 0)
+            if (lvGrups.SelectedIndex >= 0)
             {
-                foreach (Inscripcio inscripcio in inscripcionsGrupCopia)
+                if (inscripcionsGrupCopia != null && inscripcionsGrupCopia.Count >= 0)
                 {
-                    if (!grup.Inscripcions.Contains(inscripcio))
+                    foreach (Inscripcio inscripcio in inscripcionsGrupCopia)
                     {
-                        inscripcionsCopia.Add(inscripcio);
+                        if (!grup.Inscripcions.Contains(inscripcio))
+                        {
+                            inscripcionsCopia.Add(inscripcio);
+                        }
                     }
+
                 }
 
-            }
+                inscripcionsGrupCopia.Clear();
 
-            inscripcionsGrupCopia.Clear();
+                grup = Torneig.Grups[lvGrups.SelectedIndex];
+                populateForm();
+                FormEnabled(true);
+                isNou = false;
 
-            grup = Torneig.Grups[lvGrups.SelectedIndex];
-            populateForm();
-            FormEnabled(true);
-            isNou = false;
-
-            if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
-            {
-                FormEnabled(false);
+                if (Torneig.PreinscripcioOberta || Torneig.Partides.Count > 0)
+                {
+                    FormEnabled(false);
+                }
             }
         }
 
@@ -152,7 +154,8 @@ namespace GestioTornejos.UI
         {
             isNou = true;
             resetForm();
-            lvGrups.SelectedItem = null;
+            btnEliminar.IsEnabled = false;
+            lvGrups.SelectedIndex = -1;
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -179,6 +182,7 @@ namespace GestioTornejos.UI
                 }
 
                 populateForm();
+                btnEliminar.IsEnabled = true;
             }
 
             Torneig.Inscripcions = new ObservableCollection<Inscripcio>(inscripcionsCopia);
@@ -307,7 +311,7 @@ namespace GestioTornejos.UI
 
             if (inscripcionsCopia.Count > 0)
             {
-                DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que tindre tots els inscrits a dins dels grups");
+                DialogBox.Show("Error al generar emparellaments", "Tens que assignar totes les inscripcions dins d'un grup");
             }
             else
             {
@@ -316,7 +320,7 @@ namespace GestioTornejos.UI
                 {
                     if (grup.Inscripcions.Count <= 1)
                     {
-                        DialogBox.Show("Error al generar emparellaments", "Per a generar els emparellaments tens que més de una inscripció al grup");
+                        DialogBox.Show("Error al generar emparellaments", "Cada grup necessita un mínim de 2 inscripcions per a generar els emparellaments");
                         shouldInsert = false;
                         break;
                     }
@@ -348,6 +352,7 @@ namespace GestioTornejos.UI
                 if (shouldInsert)
                 {
                     PartidaDB.Insert(Torneig);
+                    btnEmparellaments.IsEnabled = false;
                 }
             }
         }
